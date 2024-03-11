@@ -31,10 +31,12 @@ pip install -r requirements.txt
 ```
 
 ## Configuration
+
 Configuration scripts are located in the `configs` directory. These scripts should be updated to reflect your specific setup:
 
 - `moodle.yaml`: Specifies the Moodle submodules required and selects the database engine.
 - `plugins.yaml`: Lists the AI submodules required and the method to launch the AI docker plugins.
+- `local.yml` : create this and it will be copied to the core\moodle-docker environment
 
 ## License
 This project is licensed under the MIT License. For more details, see the LICENSE file in the project repository.
