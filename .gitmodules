@@ -1,0 +1,6 @@
+[submodule "core/moodle-docker"]
+	path = core/moodle-docker
+	url = https://github.com/moodlehq/moodle-docker.git
+[submodule "core/moodle"]
+	path = core/moodle
+	url = https://github.com/moodle/moodle.git

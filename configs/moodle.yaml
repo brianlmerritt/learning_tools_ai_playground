@@ -1,0 +1,23 @@
+submodules:
+  - name: Moodle
+    url: https://github.com/moodle/moodle.git
+    path: core/moodle
+    tag: v4.3.2
+  - name: Moodle Docker
+    url: https://github.com/moodlehq/moodle-docker.git
+    path: core/moodle-docker
+    branch: main
+  - name: Elastic Search
+    url: https://github.com/catalyst/moodle-search_elastic.git
+    path: core/moodle/search/engine/elastic
+    branch: MOODLE_402_STABLE
+  - name: PostgresFullTextSearch
+    url: https://github.com/catalyst/moodle-search_postgresfulltext.git
+    path: core/moodle/search/engine/postgresfulltext
+    branch: master
+  - name: Azure Search
+    url: https://github.com/catalyst/moodle-search_azure.git
+    path: core/moodle/search/engine/azure
+    branch: master
+database:
+  - name: pgsql
