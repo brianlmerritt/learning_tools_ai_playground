@@ -19,7 +19,7 @@ database_name=$(yq -r '.database[0].name' "$MOODLE_YAML")
 # Export the database name as an environment variable
 export MOODLE_DOCKER_DB=$database_name
 
-echo $MOODLE_DOCKER_DB
+#echo $MOODLE_DOCKER_DB
 
 cp core/moodle-docker/config.docker-template.php $MOODLE_DOCKER_WWWROOT/config.php
 

@@ -30,36 +30,51 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     url=$(echo "$submodule" | jq -r '.url')
     path=$(echo "$submodule" | jq -r '.path')
     # Use the 'tag' if it exists, otherwise use 'branch'
-    branch_or_tag=$(echo "$submodule" | jq -r '.tag // .branch')
-    
+    branch=$(echo "$submodule" | jq -r '.branch')
+    tag=$(echo "$submodule" | jq -r '.tag')
+
     # Output or process the extracted information as needed
     echo "Name: $name"
     echo "URL: $url"
     echo "Path: $path"
-    echo "Branch/Tag: $branch_or_tag"
+    echo "Branch: $branch"
+    echo "Tag: $tag"
     echo # Just for an empty line for readability
 
     # Check if the submodule directory exists
     if [ -d "$path" ]; then
-        echo "Setting submodule $name at $path to $branch_or_tag"
+        echo "Setting submodule $name at $path to $branch $tag"
         cd "$path"
-        #git submodule update --init --recursive 
-        git checkout "$branch_or_tag"
+        echo $branch
+        if [ $branch == "null" ]; then
+            # If there is no branch, then we assume a tag is involved, create new branch or checkout existing
+            branchExists=$(git show-ref refs/heads/moodle$tag)
+            if [ -n "$branchExists" ]; then
+                # If the branch exists, just check it out
+                git checkout moodle$tag
+            else
+                # If the branch does not exist, create it based on $tag
+                git checkout -b moodle$tag $tag
+            fi
+        else
+            # Branch is set so just check it out
+            git checkout $branch
+        fi
         cd "$ROOT_DIR"
     else
         if [[ $path == *"core/moodle/"* ]]; then
             stripped_path="${path#*core/moodle/}"
             cd "$MOODLE_DIR"
             echo "Adding submodule $name at $path"
-            git submodule add --branch "$branch_or_tag" "$url" "$stripped_path"
+            git submodule add --branch "$branch" "$url" "$stripped_path"
         else
             cd "$MOODLE_DIR"
             echo "Adding submodule $name at $path"
-            git submodule add --branch "$branch_or_tag" "$url" "$path"
+            git submodule add --branch "$branch" "$url" "$path"
         fi
     fi
 done
 
 cd "$ROOT_DIR"
-git submodule update --init --recursive
+
 
