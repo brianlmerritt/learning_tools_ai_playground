@@ -4,3 +4,19 @@
 [submodule "core/moodle"]
 	path = core/moodle
 	url = https://github.com/moodle/moodle.git
+[submodule "plugins/faiss/faiss"]
+	path = plugins/faiss/faiss
+	url = https://github.com/facebookresearch/faiss
+	branch = main
+[submodule "plugins/ollama/ollama"]
+	path = plugins/ollama/ollama
+	url = https://github.com/ollama/ollama.git
+	branch = main
+[submodule "plugins/text-generation-webui/text-generation-webui"]
+	path = plugins/text-generation-webui/text-generation-webui
+	url = https://github.com/oobabooga/text-generation-webui.git
+	branch = main
+[submodule "plugins/pruju-ai/pruju-ai"]
+	path = plugins/pruju-ai/pruju-ai
+	url = https://github.com/jaluoma/pruju-ai.git
+	branch = main
