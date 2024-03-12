@@ -23,5 +23,9 @@ submodules:
     url: https://github.com/catalyst/moodle-local_aws.git
     path: core/moodle/local/aws
     branch: master
+  - name: mAIci Moodle Chat Interface
+    url: https://github.com/caiocarvalhofre/mod_maici.git
+    path: core/moodle/mod/maici
+    branch: main
 database:
   - name: pgsql
