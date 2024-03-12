@@ -32,4 +32,4 @@ services:
             sudo systemctl restart docker
           fi
 volumes:
-  ollama:
+  ${VOLUMES_HOME}/ollama:

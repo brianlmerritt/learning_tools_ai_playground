@@ -18,11 +18,23 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
+# Add Nvidea Drivers if needed?
+use_nvidia=$(yq -r '.use_nvidia' "$SUBMODULES_FILE")
+if [ "$use_nvidia" = "true" ]; then
+    export USE_NVIDIA=true
+else
+    export USE_NVIDIA=false
+fi
+
+# It seems sensible to have a separate directory for the AI volumes
+export VOLUMES_HOME = "$ROOT_DIR/ai_volumes"
+
 # Navigate to the Moodle repository
 cd "$ROOT_DIR"
 
 # Read the submodules from the YAML file
 submodules=$(yq '.submodules' "$SUBMODULES_FILE" )
+
 
 # Parse the JSON array in a loop
 echo "$submodules" | jq -c '.[]' | while read -r submodule; do
@@ -32,6 +44,7 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     # Use the 'tag' if it exists, otherwise use 'branch'
     branch=$(echo "$submodule" | jq -r '.branch')
     tag=$(echo "$submodule" | jq -r '.tag')
+    docker=$(echo "$submodule" | jq -r '.docker')
 
     # Output or process the extracted information as needed
     echo "Name: $name"
@@ -41,28 +54,16 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     echo "Tag: $tag"
     echo # Just for an empty line for readability
 
-    # Check that the plugin directory exists
-    plugin_directory_name="${path#*\/plugins\/}"
-    if [ ! -d "$PLUGINS_DIR/$plugin_directory_name" ]; then
-        mkdir "$PLUGINS_DIR/$plugin_directory_name"
-    fi
-
-    # Check if the submodule directory exists
-    if [ -d "$path" ]; then
-        # Plugin already exists - if there is a url, checkout the branch
-        echo "Setting submodule $name at $path to $branch $tag"
-        echo $url
-        if [ $url != "null" ]; then
-            cd "$path"
-            #There is a submodule here
-            git checkout $branch
-            cd "$ROOT_DIR"
-        fi
+    cd $path
+    # Run the docker command if it exists
+    if [[ -n "$docker" ]]; then
+        echo "Running Docker command: $docker"
+        eval "$docker"
     else
-        # Plugin does not exist - add it as a submodule
-        echo "Adding submodule $name at $path"
-        git submodule add --branch "$branch" "$url" "$path"
+        echo "No Docker bringup set"
     fi
+    cd $ROOT_DIR
+
 done
 
 cd "$ROOT_DIR"

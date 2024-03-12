@@ -2,23 +2,8 @@ submodules:
   - name: Weiviate
     path: plugins/weiviate
     docker: "docker compose up -d"
-  - name: Faiss
-    url: https://github.com/facebookresearch/faiss
-    path: plugins/faiss/faiss
-    branch: main
-    docker: "docker compose up -d"
   - name: Ollama
-    url: https://github.com/ollama/ollama.git
-    path: plugins/ollama/ollama
+    path: plugins/ollama
     branch: main
     docker: "docker compose up -d"
-  - name: Text Generation Webui
-    url: https://github.com/oobabooga/text-generation-webui.git
-    path: plugins/text-generation-webui/text-generation-webui
-    branch: main
-    docker: "docker compose up -d"
-  - name: Pruju-Ai
-    url: https://github.com/jaluoma/pruju-ai.git
-    path: plugins/pruju-ai/pruju-ai
-    branch: main
-    docker: "docker compose up -d"
+use_nvidia: true
