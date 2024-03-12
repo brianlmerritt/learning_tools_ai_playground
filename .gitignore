@@ -1,3 +1,5 @@
 .vscode
 .env
 ai_volumes/
+plugins/working_temp/*
+!plugins/working_temp/README.md
