@@ -1,6 +1,6 @@
 submodules:
-  - name: Weiviate
-    path: plugins/weiviate
+  - name: Weaviate
+    path: plugins/weaviate
     docker: "docker compose up -d"
   - name: Ollama
     path: plugins/ollama

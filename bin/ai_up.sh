@@ -27,7 +27,7 @@ else
 fi
 
 # It seems sensible to have a separate directory for the AI volumes
-export VOLUMES_HOME = "$ROOT_DIR/ai_volumes"
+export VOLUMES_HOME="$ROOT_DIR/ai_volumes"
 
 # Navigate to the Moodle repository
 cd "$ROOT_DIR"
