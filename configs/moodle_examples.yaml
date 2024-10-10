@@ -29,11 +29,11 @@ submodules:
     branch: main
   - name: Moodle Search Solr RAG
     url: https://github.com/mhughes2k/moodle-search_solrrag.git
-    path: search/solrrag
+    path: core/moodle/search/solrrag
     branch: main
   - name: Moodle Local AI
     url: https://github.com/mhughes2k/moodle-local_ai.git
-    path: local/local_ai
+    path: core/moodle/local/local_ai
     branch: main
 database:
   - name: pgsql

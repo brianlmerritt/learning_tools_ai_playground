@@ -22,10 +22,21 @@ sudo apt install jq # json parser for batch scripts
 git clone https://github.com/brianlmerritt/moodle_ai_playground
 cd moodle_ai_playground
 pip install -r requirements.txt
+
+# Pull in the core submodules
+git submodule update --init --recursive
+
 # edit configs/moodle.yaml and configs/plugins.yaml as needed
 ./bin/moodle_submodules.sh # This adds submodules and checks out the branch / tag as needed
-./bin/moodle_up.sh 
+./bin/moodle_up.sh
+
+# Bring up the plugins
+
 ### Play with stuff and see if Moodle installs ok on localhost:8000
+
+
+
+
 ./bin/moodle_down.sh
 
 ```
@@ -52,7 +63,7 @@ Contributions to the Moodle AI Playground are welcome! If you're interested in c
 For more detailed instructions, please refer to [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Todo
-- [ ] Get minimum AI system of faiss and pruju-ai running and integrated with Moodle environment
+- [ ] Get minimum AI system of SOLR and ElasticSearch running and integrated with Moodle environment
 - [ ] Get working Ollama and/or text generation webui install working
 - [ ] Setup Moodle environment to test search (and export to vector stores)
 - [ ] Lots of stuff no one has even thought of yet
