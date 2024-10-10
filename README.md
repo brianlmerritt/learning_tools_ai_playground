@@ -27,10 +27,15 @@ pip install -r requirements.txt
 git submodule update --init --recursive
 
 # edit configs/moodle.yaml and configs/plugins.yaml as needed
+./bin/setup_environment.sh # Note this is .gitignored. Copy ./bin/setup_environment_example.sh and add any AI keys
 ./bin/moodle_submodules.sh # This adds submodules and checks out the branch / tag as needed
-./bin/moodle_up.sh
+./bin/plugin_submodules.sh # Makes sure a docker-compose.yaml exists or does a git pull if missing and a url is provided.
 
-# Bring up the plugins
+
+# Bring up Moodle and the AI docker plugins
+./bin/moodle_up.sh # Brings up Moodle docker
+./bin/ai_up.sh # Brings up AI related docker instances
+
 
 ### Play with stuff and see if Moodle installs ok on localhost:8000
 

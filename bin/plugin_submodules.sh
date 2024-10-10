@@ -4,7 +4,6 @@
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 CONFIGS_DIR="$ROOT_DIR/configs"
-MOODLE_DIR="$ROOT_DIR/core/moodle"
 SUBMODULES_FILE="$CONFIGS_DIR/plugins.yaml"
 PLUGINS_DIR="$ROOT_DIR/plugins"
 
@@ -18,54 +17,38 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-# Navigate to the Moodle repository
+# Navigate to the root directory
 cd "$ROOT_DIR"
 
 # Read the submodules from the YAML file
-submodules=$(yq '.submodules' "$SUBMODULES_FILE" )
+submodules=$(yq '.submodules' "$SUBMODULES_FILE")
 
 # Parse the JSON array in a loop
 echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     name=$(echo "$submodule" | jq -r '.name')
     url=$(echo "$submodule" | jq -r '.url')
     path=$(echo "$submodule" | jq -r '.path')
-    # Use the 'tag' if it exists, otherwise use 'branch'
-    branch=$(echo "$submodule" | jq -r '.branch')
-    tag=$(echo "$submodule" | jq -r '.tag')
 
-    # Output or process the extracted information as needed
-    echo "Name: $name"
-    echo "URL: $url"
-    echo "Path: $path"
-    echo "Branch: $branch"
-    echo "Tag: $tag"
-    echo # Just for an empty line for readability
-
-    # Check that the plugin directory exists
+    # Extract the plugin directory name
     plugin_directory_name=$(echo "$path" | awk -F'/' '{print $2}')
-    echo $plugin_directory_name
-    if [ ! -d "$PLUGINS_DIR/$plugin_directory_name" ]; then
-        mkdir "$PLUGINS_DIR/$plugin_directory_name"
-    fi
+    plugin_path="$PLUGINS_DIR/$plugin_directory_name"
 
-    # Check if the submodule directory exists
-    if [ -d "$path" ]; then
-        # Plugin already exists - if there is a url, checkout the branch
-        if [ $url != "null" ]; then
-            echo "Setting submodule $name at $path to $branch $tag"
-            echo $url
-            cd "$path"
-            #There is a submodule here
-            git checkout $branch
-            cd "$ROOT_DIR"
+    # Check if docker-compose.yaml exists
+    if [ -f "$plugin_path/docker-compose.yaml" ]; then
+        echo "$name: docker-compose.yaml exists"
+    elif [ -d "$plugin_path" ]; then
+        # Check if git pull is needed
+        cd "$plugin_path"
+        git fetch
+        if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
+            echo "$name: git pull needed"
+        else
+            echo "$name: up to date"
         fi
+        cd "$ROOT_DIR"
     else
-        # Plugin does not exist - add it as a submodule
-        echo "Adding submodule $name at $path"
-        git submodule add --branch "$branch" "$url" "$path"
+        echo "$name: needs to be cloned"
     fi
 done
 
 cd "$ROOT_DIR"
-
-

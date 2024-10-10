@@ -1,7 +1,6 @@
-version: '3.8'
 services:
   tika:
-    image: apache/tika:2.9.1-full
+    image: apache/tika:latest-full
     ports:
      - "9998:9998"
     environment:

@@ -23,16 +23,6 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-# Add Nvidia Drivers if needed
-use_nvidia=$(yq -r '.use_nvidia' "$SUBMODULES_FILE")
-if [ "$use_nvidia" = "true" ]; then
-    export USE_NVIDIA=true
-    echo "Nvidia support enabled"
-else
-    export USE_NVIDIA=false
-    echo "Nvidia support disabled"
-fi
-
 # Read the submodules from the YAML file
 submodules=$(yq '.submodules' "$SUBMODULES_FILE")
 
@@ -46,6 +36,7 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     echo "Name: $name"
     echo "Path: $path"
     echo "Docker Command: $docker_command"
+    #echo # Just for an empty line for readability
 
     # Extract the plugin directory name from the path
     plugin_directory_name=$(echo "$path" | awk -F'/' '{print $2}')
@@ -71,4 +62,4 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     cd "$ROOT_DIR" || exit
 done
 
-echo "AI plugin setup completed."
+echo "Plugin submodules processing completed."

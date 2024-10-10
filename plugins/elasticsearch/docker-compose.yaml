@@ -1,26 +1,20 @@
-version: '3.4'
 services:
-  weaviate:
-    command:
-    - --host
-    - 0.0.0.0
-    - --port
-    - '8081'
-    - --scheme
-    - http
-    image: cr.weaviate.io/semitechnologies/weaviate:1.23.12
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.4
     ports:
-    - 8081:8088
-    - 50051:50051
+      - 9200:9200
+      - 9300:9300
     volumes:
-    - ${VOLUMES_HOME}/weaviate_data:/var/lib/weaviate
-    restart: on-failure:0
+      - ${VOLUMES_HOME}/elasticsearch_data:/usr/share/elasticsearch/data
     environment:
-      QUERY_DEFAULTS_LIMIT: 25
-      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
-      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
-      DEFAULT_VECTORIZER_MODULE: 'none'
-      ENABLE_MODULES: 'text2vec-cohere,text2vec-huggingface,text2vec-palm,text2vec-openai,generative-openai,generative-cohere,generative-palm,ref2vec-centroid,reranker-cohere,qna-openai'
-      CLUSTER_HOSTNAME: 'node1'
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    restart: on-failure:0
+
 volumes:
-  weaviate_data: 
+  elasticsearch_data:

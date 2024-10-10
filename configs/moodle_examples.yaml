@@ -2,7 +2,7 @@ submodules:
   - name: Moodle
     url: https://github.com/moodle/moodle.git
     path: core/moodle
-    branch: main
+    tag: v4.5.0
   - name: Moodle Docker
     url: https://github.com/moodlehq/moodle-docker.git
     path: core/moodle-docker
