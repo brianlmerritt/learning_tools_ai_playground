@@ -2,7 +2,7 @@ submodules:
   - name: Moodle
     url: https://github.com/moodle/moodle.git
     path: core/moodle
-    tag: v4.1.8
+    branch: main
   - name: Moodle Docker
     url: https://github.com/moodlehq/moodle-docker.git
     path: core/moodle-docker
@@ -26,6 +26,14 @@ submodules:
   - name: mAIci Moodle Chat Interface
     url: https://github.com/caiocarvalhofre/mod_maici.git
     path: core/moodle/mod/maici
+    branch: main
+  - name: Moodle Search Solr RAG
+    url: https://github.com/mhughes2k/moodle-search_solrrag.git
+    path: search/solrrag
+    branch: main
+  - name: Moodle Local AI
+    url: https://github.com/mhughes2k/moodle-local_ai.git
+    path: local/local_ai
     branch: main
 database:
   - name: pgsql

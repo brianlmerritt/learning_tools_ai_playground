@@ -24,4 +24,13 @@ submodules:
   - name: Open Webui
     path: plugins/open-webui
     docker: "docker compose up -d"
+  - name: ElasticSearch
+    path: plugins/elasticsearch
+    docker: "docker compose up -d"
+  - name: SOLR Search
+    path: plugins/solr
+    docker: "docker compose up -d"
+  - name: Apache Tika
+    path: plugins/apache_tika
+    docker: "docker compose up -d"
 use_nvidia: true

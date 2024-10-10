@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  solr:
+    image: solr:9.3
+    ports:
+     - "8983:8983"
+    volumes:
+      - ${VOLUMES_HOME}/solr_data:/var/solr
+    environment:
+      - SOLR_JAVA_MEM="-Xms512m -Xmx512m"
+    command:
+      - solr-precreate
+      - mycore
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8983/solr/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: on-failure:0
+
+volumes:
+  solr_data:
