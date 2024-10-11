@@ -8,6 +8,7 @@ services:
     - --scheme
     - http
     image: cr.weaviate.io/semitechnologies/weaviate:1.23.12
+    container_name: weaviate
     ports:
     - 8081:8088
     - 50051:50051

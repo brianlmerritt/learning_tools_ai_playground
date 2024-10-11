@@ -7,11 +7,10 @@ CONFIGS_DIR="$ROOT_DIR/configs"
 PLUGINS_DIR="$ROOT_DIR/plugins"
 SUBMODULES_FILE="$CONFIGS_DIR/plugins.yaml"
 
-# Check if VOLUMES_HOME is set, if not, set it to the project root ai_volumes directory
-if [ -z "$VOLUMES_HOME" ]; then
-    source $ROOT_DIR/bin/setup_environment.sh
-    echo "VOLUMES_HOME was not set. It has been set to: $VOLUMES_HOME"
-fi
+
+source $ROOT_DIR/bin/setup_environment.sh
+echo "Environmental Variables Set"
+
 
 # If yq or jq not already installed then abort (yq is a YAML processor)
 if ! command -v yq &> /dev/null; then

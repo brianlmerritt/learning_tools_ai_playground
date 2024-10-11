@@ -1,0 +1,20 @@
+services:
+  python_ai_dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: python_ai_dev
+    container_name: python_ai_dev
+    environment:
+      - OPENAI_API_KEY
+      - ANTHROPIC_API_KEY
+      - HUGGINGFACE_API_TOKEN
+    volumes:
+      - ../../python_playground:/home/pythondev/workspace
+    user: pythondev
+    working_dir: /home/pythondev/workspace
+    command: /bin/bash
+    tty: true
+
+volumes:
+  python_playground:

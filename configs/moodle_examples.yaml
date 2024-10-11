@@ -33,7 +33,7 @@ submodules:
     branch: main
   - name: Moodle Local AI
     url: https://github.com/mhughes2k/moodle-local_ai.git
-    path: core/moodle/local/local_ai
+    path: core/moodle/local/ai
     branch: main
 database:
   - name: pgsql

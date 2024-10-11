@@ -15,4 +15,7 @@ submodules:
   - name: Apache Tika
     path: plugins/apache_tika
     docker: "docker compose up -d"
+  - name: Python Playground
+    path: plugins/python_ai_playground
+    docker: "docker compose up --build -d"
 use_nvidia: true

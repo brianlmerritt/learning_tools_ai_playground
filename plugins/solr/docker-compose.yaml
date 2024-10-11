@@ -1,6 +1,8 @@
 services:
   solr:
     image: solr:9.3
+    container_name: solr
+    user: root
     ports:
      - "8983:8983"
     volumes:
