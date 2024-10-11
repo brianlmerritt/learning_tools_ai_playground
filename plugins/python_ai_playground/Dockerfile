@@ -28,7 +28,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
     langgraph \
     transformers \
     torch \
-    ultralytics
+    ultralytics \
+    anthropic \
+    huggingface_hub
 
 # Change ownership of the working directory to pythondev
 RUN chown -R pythondev:pythondev /home/pythondev

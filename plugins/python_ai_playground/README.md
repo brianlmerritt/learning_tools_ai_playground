@@ -4,7 +4,7 @@ Here's a summary of what has been done:
 
 Created a docker-compose.yaml file in the plugins/python_playground directory with the following features:
 
-Environment variables for OPENAI_API_KEY, ANTHROPIC_API_KEY, and HUGGINGFACE_API_TOKEN
+Environment variables for OPENAI_API_KEY, ANTHROPIC_API_KEY, and HUGGINGFACE_API_KEY
 Volume mapping from $ROOT/python_playground to /home/pythondev/workspace in the container
 User configuration to run as "pythondev"
 Created a Dockerfile in the same directory with:

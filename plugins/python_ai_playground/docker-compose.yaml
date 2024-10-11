@@ -8,7 +8,7 @@ services:
     environment:
       - OPENAI_API_KEY
       - ANTHROPIC_API_KEY
-      - HUGGINGFACE_API_TOKEN
+      - HUGGINGFACE_API_KEY
     volumes:
       - ../../python_playground:/home/pythondev/workspace
     user: pythondev
