@@ -24,7 +24,7 @@ export MOODLE_DOCKER_DB=$database_name
 cp core/moodle-docker/config.docker-template.php $MOODLE_DOCKER_WWWROOT/config.php
 
 if [ -f "$CONFIGS_DIR/local.yaml" ]; then
-    cp "$CONFIGS_DIR/local.yaml" "$MOODLE_DOCKER_DIR/local.yaml"
+    cp "$CONFIGS_DIR/local.yaml" "$MOODLE_DOCKER_DIR/local.yml"
 fi
 
 cd $MOODLE_DOCKER_DIR

@@ -22,6 +22,6 @@ docker-compose up --build -d
 
 To enter the container and start working, use:
 
-docker-compose exec python_ai_dev bash
+docker-compose exec -it python_ai_dev bash
 
 You will now be in the container as the "pythondev" user, with all the specified AI libraries installed and ready to use. The $ROOT/python_playground directory is mapped to /home/pythondev/workspace inside the container, so any changes you make will persist on your host machine.

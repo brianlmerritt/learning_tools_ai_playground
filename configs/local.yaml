@@ -1,0 +1,7 @@
+services:
+  db:
+    volumes:
+      - moodledb_data:/var/lib/postgresql/data
+
+volumes:
+  moodledb_data:
