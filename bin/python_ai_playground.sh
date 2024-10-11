@@ -1,0 +1,1 @@
+docker exec -it python_ai_playground /bin/bash

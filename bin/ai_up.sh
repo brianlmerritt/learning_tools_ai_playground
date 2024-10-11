@@ -7,10 +7,11 @@ CONFIGS_DIR="$ROOT_DIR/configs"
 PLUGINS_DIR="$ROOT_DIR/plugins"
 SUBMODULES_FILE="$CONFIGS_DIR/plugins.yaml"
 
-
 source $ROOT_DIR/bin/setup_environment.sh
-echo "Environmental Variables Set"
+echo "Environmental Variables Set including VOLUMES_HOME:${VOLUMES_HOME}"
 
+#sudo chown -R 8983:8983 ${VOLUMES_HOME}/solr_data
+#sudo chmod -R 755 ${VOLUMES_HOME}/solr_data
 
 # If yq or jq not already installed then abort (yq is a YAML processor)
 if ! command -v yq &> /dev/null; then
@@ -31,6 +32,14 @@ else
     export USE_NVIDIA=false
     echo "Nvidia support disabled"
 fi
+
+# Get the Moodle Docker network name
+MOODLE_NETWORK=$(docker network ls | grep moodle-docker | awk '{print $2}')
+if [ -z "$MOODLE_NETWORK" ]; then
+    echo "Error: Moodle Docker network not found. Please run bin/moodle_up.sh first."
+    exit 1
+fi
+echo "Using Moodle Docker network: $MOODLE_NETWORK"
 
 # Read the submodules from the YAML file
 submodules=$(yq '.submodules' "$SUBMODULES_FILE")
@@ -60,7 +69,11 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     # Run the docker command
     if [ "$docker_command" != "null" ]; then
         echo "Running docker command for $name"
-        eval "$docker_command"
+        # Add the network parameter to the docker command
+        modified_docker_command=$(echo "$docker_command" | sed "s/docker-compose/docker-compose --network $MOODLE_NETWORK/")
+        # Add explicit network configuration to each service
+        modified_docker_command=$(echo "$modified_docker_command" | sed 's/up -d/up -d --force-recreate/')
+        eval "$modified_docker_command"
     else
         echo "No docker command specified for $name"
     fi

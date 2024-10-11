@@ -4,23 +4,21 @@ services:
     container_name: tika
     ports:
      - "9998:9998"
-    environment:
-      - TIKA_CONFIG=/tika-config.xml
-    volumes:
-      - ${VOLUMES_HOME}/tika_config:/tika-config
     command:
       - --host
       - 0.0.0.0
       - --port
       - "9998"
-      - --config
-      - /tika-config/tika-config.xml
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9998/tika"]
       interval: 30s
       timeout: 10s
       retries: 5
     restart: on-failure:0
+    networks:
+      - moodle_network
 
-volumes:
-  tika_config:
+networks:
+  moodle_network:
+    external: true
+    name: ${MOODLE_NETWORK:-moodle-docker_default}

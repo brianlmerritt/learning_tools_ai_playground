@@ -34,3 +34,7 @@ bin/moodle-docker-compose up -d
 
 # Wait for DB to come up (important for oracle/mssql)
 bin/moodle-docker-wait-for-db
+
+# Print the name of the created network
+echo "Moodle Docker network created:"
+docker network ls | grep moodle-docker | awk '{print $2}'

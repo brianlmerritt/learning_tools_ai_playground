@@ -3,6 +3,18 @@ import requests
 from requests.exceptions import RequestException
 import socket
 
+# Define network hosts and ports
+weaveate_host = "weaviate"
+weaveate_port = 8081
+ollama_host = "ollama"
+ollama_port = 11434
+solr_host = "solr"
+solr_port = 8983
+elasticsearch_host = "elasticsearch"
+elasticsearch_port = 9200
+tika_host = "tika"
+tika_port = 9998
+
 def check_env_var(var_name):
     return os.environ.get(var_name) is not None
 
@@ -13,12 +25,18 @@ def check_connection(url):
     except RequestException:
         return False
 
-def check_port(host, port):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.settimeout(5)
-    result = sock.connect_ex((host, port))
-    sock.close()
-    return result == 0
+def check_port(host, port, name):
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(5)
+        result = sock.connect_ex((host, port))
+        sock.close()
+        if result == 0:
+            print(f"{name}: 'Available'")
+        else:
+            print(f"{name}: 'NOT Available'")
+    except:
+        print(f"{name} is NOT reachable")
 
 # Check AI services
 print("Checking AI services:")
@@ -47,15 +65,10 @@ if huggingface_api_key:
 print("\nChecking database services:")
 
 # Weaviate
-weaviate_available = check_port('localhost', 8080)
-print(f"Weaviate: {'Available' if weaviate_available else 'Not available'}")
-
-# Elasticsearch
-elasticsearch_available = check_port('localhost', 9200)
-print(f"Elasticsearch: {'Available' if elasticsearch_available else 'Not available'}")
-
-# Ollama
-ollama_available = check_port('localhost', 11434)
-print(f"Ollama: {'Available' if ollama_available else 'Not available'}")
+check_port(weaveate_host, weaveate_port, "Weaviate")
+check_port(elasticsearch_host, elasticsearch_port, "ElasticSearch")
+check_port(solr_host, solr_port, "SOLR")
+check_port(ollama_host, ollama_port, "OLLAMA")
+check_port(tika_host, tika_port, "Tika")
 
 print("\nCheck complete.")

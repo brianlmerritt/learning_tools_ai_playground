@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: python_ai_dev
-    container_name: python_ai_dev
+    container_name: python_ai_playground
     environment:
       - OPENAI_API_KEY
       - ANTHROPIC_API_KEY
@@ -15,6 +15,13 @@ services:
     working_dir: /home/pythondev/workspace
     command: /bin/bash
     tty: true
+    networks:
+      - moodle_network
 
 volumes:
   python_playground:
+
+networks:
+  moodle_network:
+    external: true
+    name: ${MOODLE_NETWORK:-moodle-docker_default}

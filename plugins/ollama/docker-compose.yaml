@@ -31,5 +31,13 @@ services:
             sudo nvidia-ctk runtime configure --runtime=docker
             sudo systemctl restart docker
           fi
+    networks:
+      - moodle_network
 volumes:
   ollama:
+
+
+networks:
+  moodle_network:
+    external: true
+    name: ${MOODLE_NETWORK:-moodle-docker_default}
