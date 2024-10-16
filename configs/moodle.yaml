@@ -35,5 +35,17 @@ submodules:
     url: https://github.com/mhughes2k/moodle-local_ai.git
     path: core/moodle/local/ai
     branch: master
+  - name: Moodle Course Format Topcoll
+    url: https://github.com/gjbarnard/moodle-format_topcoll.git
+    path: core/moodle/course/format/topcoll
+    branch: main
+  - name: Moodle Course Format Tiles
+    url: https://bitbucket.org/dw8/moodle-format_tiles.git
+    path: core/moodle/course/format/tiles
+    branch: master
+  - name: Moodle Auto Enrolment
+    url: https://github.com/bobopinna/moodle-enrol_autoenrol.git
+    path: core/moodle/enrol/autoenrol
+    branch: master
 database:
   - name: pgsql

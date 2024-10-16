@@ -11,7 +11,7 @@ submodules:
     docker: "docker compose up --build -d"
   - name: SOLR Search
     path: plugins/solr
-    docker: "docker compose up -d"
+    docker: "docker compose up --build -d"
   - name: Apache Tika
     path: plugins/apache_tika
     docker: "docker compose up -d"

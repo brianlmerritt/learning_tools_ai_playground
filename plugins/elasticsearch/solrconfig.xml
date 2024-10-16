@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+  <luceneMatchVersion>9.4</luceneMatchVersion>
+  
+  <lib dir="${solr.install.dir:../../../..}/contrib/ltr/lib/" regex=".*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-ltr-\d.*\.jar" />
+
+  <requestHandler name="/select" class="solr.SearchHandler">
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <int name="rows">10</int>
+    </lst>
+  </requestHandler>
+
+  <query>
+    <enableLazyFieldLoading>true</enableLazyFieldLoading>
+  </query>
+
+  <transformer name="features" class="org.apache.solr.ltr.response.transform.LTRFeatureLoggerTransformerFactory">
+    <str name="fvCacheName">QUERY_DOC_FV</str>
+  </transformer>
+
+  <queryParser name="ltr" class="org.apache.solr.ltr.search.LTRQParserPlugin"/>
+
+  <cache name="QUERY_DOC_FV"
+         class="solr.search.LRUCache"
+         size="4096"
+         initialSize="2048"
+         autowarmCount="4096"
+         regenerator="solr.NoOpRegenerator" />
+         
+  <runtimeLib>true</runtimeLib>
+</config>

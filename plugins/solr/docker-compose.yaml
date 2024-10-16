@@ -1,18 +1,16 @@
 services:
   solr:
-    image: solr:9.3
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: solr
     ports:
      - "8983:8983"
     volumes:
       - ${VOLUMES_HOME}/solr_data:/var/solr
-      - ./solr-entrypoint.sh:/solr-entrypoint.sh
+      - ./solr_config:/opt/solr/server/solr/configsets/_default/conf
     environment:
       SOLR_JAVA_MEM: "-Xms1g -Xmx2g"
-    entrypoint: ["/bin/bash", "/solr-entrypoint.sh"]
-    command:
-      - solr-precreate
-      - mycore
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8983/solr/"]
       interval: 30s
