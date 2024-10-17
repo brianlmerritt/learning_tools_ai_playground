@@ -29,7 +29,7 @@ submodules:
     branch: main
   - name: Moodle Search Solr RAG
     url: https://github.com/mhughes2k/moodle-search_solrrag.git
-    path: core/moodle/search/solrrag
+    path: core/moodle/search/engine/solrrag
     branch: master
   - name: Moodle Local AI
     url: https://github.com/mhughes2k/moodle-local_ai.git
