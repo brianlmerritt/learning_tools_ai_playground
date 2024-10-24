@@ -1,0 +1,18 @@
+services:
+  nginx-proxy:
+    image: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "8443:8443"  # Expose SSL on port 8443
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro  # Mount Nginx configuration from root
+      - ./rvc-vle-test.rvc.ac.uk.crt:/etc/nginx/certs/rvc-vle-test.rvc.ac.uk.crt:ro  # Mount certificate from root
+      - ./rvc-vle-test.rvc.ac.uk.key:/etc/nginx/certs/rvc-vle-test.rvc.ac.uk.key:ro  # Mount key from root
+    networks:
+      - moodle_network
+    restart: always
+
+networks:
+  moodle_network:
+    external: true
+    name: ${MOODLE_NETWORK:-moodle-docker_default}

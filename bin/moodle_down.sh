@@ -14,9 +14,11 @@ database_name=$(yq -r '.database[0].name' "$MOODLE_YAML")
 # Export the database name as an environment variable
 export MOODLE_DOCKER_DB=$database_name
 
+# Shutdown the nginx proxy
+cd $ROOT_DIR/core/nginx_proxy
+docker compose down
+
 cd $MOODLE_DOCKER_DIR
-
-
 
 # Start up containers
 bin/moodle-docker-compose down

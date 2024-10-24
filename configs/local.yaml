@@ -1,7 +1,21 @@
 services:
+  webserver:
+    environment:
+      MOODLE_DOCKER_SSL: "true"
+      MOODLE_SSLPROXY: "true"
+      MOODLE_DOCKER_WEB_HOST: "rvc-vle-test.rvc.ac.uk"
+      MOODLE_DOCKER_WEB_PROTOCOL: "https"
+      MOODLE_DOCKER_WEB_PORT: "8443"
+      MOODLE_DOCKER_SSL_OVERRIDE: "true"
+
   db:
     volumes:
       - moodledb_data:/var/lib/postgresql/data
 
 volumes:
   moodledb_data:
+
+networks:
+  moodle_network:
+    external: true
+    name: ${MOODLE_NETWORK:-moodle-docker_default}

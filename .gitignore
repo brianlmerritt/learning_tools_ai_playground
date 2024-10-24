@@ -5,3 +5,5 @@ ai_volumes/
 plugins/working_temp/*
 !plugins/working_temp/README.md
 moodle_backups/*.mbz
+*.crt
+*.key
