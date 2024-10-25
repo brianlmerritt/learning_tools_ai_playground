@@ -56,9 +56,26 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     # Shut down the docker containers
     if [ "$docker_command" != "null" ]; then
         echo "Shutting down docker containers for $name"
-        if [ -f "docker-compose.yaml" ] || [ -f "docker-compose.yml" ]; then
+        
+        # Extract the docker-compose file name if specified
+        docker_compose_file=$(echo "$docker_command" | grep -oP '(?<=-f )[^ ]+(?=\.ya?ml)')
+        
+        if [ -n "$docker_compose_file" ]; then
+            # Use the specified docker-compose file
+            compose_file="${docker_compose_file}.yaml"
+            [ ! -f "$compose_file" ] && compose_file="${docker_compose_file}.yml"
+        elif [ -f "docker-compose.yaml" ]; then
+            compose_file="docker-compose.yaml"
+        elif [ -f "docker-compose.yml" ]; then
+            compose_file="docker-compose.yml"
+        else
+            compose_file=""
+        fi
+
+        if [ -n "$compose_file" ]; then
             # If a docker-compose file exists, use docker-compose down
-            docker compose down
+            echo "Using docker-compose file: $compose_file"
+            docker compose -f "$compose_file" down
         else
             # For other docker commands, try to extract the container name and stop it
             container_name=$(echo "$docker_command" | grep -oP '(?<=--name )\w+')

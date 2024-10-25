@@ -6,7 +6,7 @@ The Learning Tools AI Playground is a docker environment designed for experiment
 ### Helper Scripts
 Within the `bin` directory, several helper scripts are available to streamline the setup and management of the Moodle AI Playground:
 
-- `moodle_submodules.sh`: Pulls in necessary Moodle plugins and supporting systems, checking out the relevant branch.
+- `moodle_submodules.sh`: Pulls in necessary Moodle plugins and supporting systems, checking out the relevant branch.  Re-run this script any time you change the moodle.yaml file to bring in the correct repositories and branches.
 - `plugin_submodules.sh`: Fetches the required AI plugins, systems, and tools to build the AI playground.
 - `moodle_up.sh`: Launches the Moodle docker server and its services.
 - `moodle_down.sh`: Stops the Moodle docker server.
@@ -47,6 +47,12 @@ Configuration scripts are located in the `configs` directory. These scripts shou
 - `plugins.yaml`: Lists the AI submodules required and the method to launch the AI docker plugins.
 - `local.yml` : create this and it will be copied to the core\moodle-docker environment
 - `setup_environment.sh` : Put your OpenAI, Anthropic, and/or HuggingFace keys in this file.  Note Ollama is run locally and uses your GPU if available, but of course OpenAI, Anthropic, and HuggingFace are external services.
+
+### setup_environment.sh notes ###
+
+If you are using an NVidia GPU, set export USE_NVIDIA=true, otherwise false.  You *must* also use the correct ollama docker container in plugins.yaml.  Use the docker-compose-nvidia.yaml file to launch the Ollama GPU enabled docker containers.  Otherwise use docker-compose-cpu.yaml.
+
+If you want to use SSL for the Moodle host, set export MOODLE_DOCKER_SSL_OVERRIDE=true.  Note that this will override the default port of 8000 to 8443.  You will also need to update the MOODLE_DOCKER_WEB_PORT in setup_environment.sh to 8443.  You will also have to add the appropriate ssl certificates to the core/nginx_proxy root folder.
 
 ## Operation
 
