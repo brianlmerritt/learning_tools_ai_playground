@@ -10,7 +10,7 @@ submodules:
   - name: Ollama
     path: plugins/ollama
     branch: main
-    docker: "docker compose up -d"
+    docker: "docker compose -f docker-compose-cpu.yaml up -d" # use docker-compose-cpu.yaml for CPU or docker-compose-nvidia.yaml if using GPU
   - name: Text Generation Webui
     url: https://github.com/oobabooga/text-generation-webui.git
     path: plugins/text-generation-webui/text-generation-webui

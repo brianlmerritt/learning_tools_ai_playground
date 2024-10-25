@@ -5,7 +5,7 @@ submodules:
   - name: Ollama
     path: plugins/ollama
     branch: main
-    docker: "docker compose up -d"
+    docker: "docker compose -f docker-compose-cpu.yaml up -d" # use docker-compose-cpu.yaml for CPU or docker-compose-nvidia.yaml if using GPU
   - name: ElasticSearch
     path: plugins/elasticsearch
     docker: "docker compose up --build -d"

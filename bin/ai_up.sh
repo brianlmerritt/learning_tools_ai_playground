@@ -69,11 +69,19 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     # Run the docker command
     if [ "$docker_command" != "null" ]; then
         echo "Running docker command for $name"
-        # Add the network parameter to the docker command
-        modified_docker_command=$(echo "$docker_command" | sed "s/docker-compose/docker-compose --network $MOODLE_NETWORK/")
-        # Add explicit network configuration to each service
-        modified_docker_command=$(echo "$modified_docker_command" | sed 's/up -d/up -d --force-recreate/')
-        eval "$modified_docker_command"
+        # Extract the YAML file name from the docker command
+        yaml_file=$(echo "$docker_command" | sed -n 's/.*-f \([^ ]*\).*/\1/p')
+        if [ -n "$yaml_file" ]; then
+            # Add or update the network configuration in the YAML file
+            if ! grep -q "networks:" "$yaml_file"; then
+                echo "networks:" >> "$yaml_file"
+                echo "  moodle_network:" >> "$yaml_file"
+                echo "    external: true" >> "$yaml_file"
+                echo "    name: $MOODLE_NETWORK" >> "$yaml_file"
+            fi
+        fi
+        # Run the docker compose command
+        eval "$docker_command"
     else
         echo "No docker command specified for $name"
     fi

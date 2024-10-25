@@ -9,8 +9,14 @@ RUN apt-get update && apt-get install -y wget curl && \
     wget -O /opt/solr/contrib/ltr/lib/solr-ltr-9.4.0.jar https://repo1.maven.org/maven2/org/apache/solr/solr-ltr/9.4.0/solr-ltr-9.4.0.jar
 
 # Copy custom configuration files
-COPY solrconfig.xml /opt/solr/server/solr/configsets/_default/conf/
-COPY managed-schema /opt/solr/server/solr/configsets/_default/conf/
+COPY solr_config/solrconfig.xml /opt/solr/server/solr/configsets/_default/conf/
+COPY solr_config/managed-schema /opt/solr/server/solr/configsets/_default/conf/
+
+# Set proper permissions for the copied files
+RUN chown solr:solr /opt/solr/server/solr/configsets/_default/conf/solrconfig.xml \
+    /opt/solr/server/solr/configsets/_default/conf/managed-schema && \
+    chmod 644 /opt/solr/server/solr/configsets/_default/conf/solrconfig.xml \
+    /opt/solr/server/solr/configsets/_default/conf/managed-schema
 
 # Copy custom entrypoint script
 COPY solr-entrypoint.sh /usr/local/bin/solr-entrypoint.sh

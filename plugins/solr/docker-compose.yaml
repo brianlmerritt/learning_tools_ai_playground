@@ -1,3 +1,4 @@
+version: '3'
 services:
   solr:
     build:
@@ -7,10 +8,10 @@ services:
     ports:
      - "8983:8983"
     volumes:
-      - ${VOLUMES_HOME}/solr_data:/var/solr
+      - solr_data:/var/solr
       - ./solr_config:/opt/solr/server/solr/configsets/_default/conf
     environment:
-      SOLR_JAVA_MEM: "-Xms1g -Xmx2g"
+      SOLR_JAVA_MEM: "-Xms512m -Xmx512m"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8983/solr/"]
       interval: 30s
