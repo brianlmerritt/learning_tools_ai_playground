@@ -7,6 +7,13 @@ services:
       MOODLE_DOCKER_WEB_PROTOCOL: "https"
       MOODLE_DOCKER_WEB_PORT: "8443"
       MOODLE_DOCKER_SSL_OVERRIDE: "true"
+    command: >
+      sh -c "
+        (while true; do php /var/www/html/admin/cli/cron.php; done) &
+        apache2-foreground
+      "
+    volumes:
+      - ${MOODLE_DOCKER_WWWROOT}:/var/www/html
 
   db:
     volumes:
@@ -16,6 +23,5 @@ volumes:
   moodledb_data:
 
 networks:
-  moodle_network:
-    external: true
-    name: ${MOODLE_NETWORK:-moodle-docker_default}
+  default:
+    name: ${MOODLE_DOCKER_NETWORK:-moodle-docker_default}

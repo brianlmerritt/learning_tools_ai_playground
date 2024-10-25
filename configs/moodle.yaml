@@ -47,5 +47,53 @@ submodules:
     url: https://github.com/bobopinna/moodle-enrol_autoenrol.git
     path: core/moodle/enrol/autoenrol
     branch: master
+  - name: Boost Union Theme
+    url: https://github.com/moodle-an-hochschulen/moodle-theme_boost_union.git
+    path: core/moodle/enrol/autoenrol
+    branch: MOODLE_405_STABLE
+  - name: RVC Survey Block
+    url: https://github.com/RVC-Learn-Digital-Team/moodle_block_rvc_survey.git
+    path: core/moodle/blocks/rvc_survey
+    branch: main
+  - name: Checklist Block
+    url: https://github.com/davosmith/moodle-block_checklist.git
+    path: core/moodle/blocks/checklist
+    branch: master
+  - name: Scheduler Activity
+    url: https://github.com/bostelm/moodle-mod_scheduler.git
+    path: core/moodle/mod/scheduler
+    branch: master
+  - name: Custom Certificate Activity
+    url: https://github.com/mdjnelson/moodle-mod_customcert.git
+    path: core/moodle/mod/customcert
+    branch: MOODLE_404_STABLE
+  - name: Checklist Activity
+    url: https://github.com/davosmith/moodle-checklist.git
+    path: core/moodle/mod/checklist
+    branch: master
+  - name: Booking Activity
+    url: https://github.com/Wunderbyte-GmbH/moodle-mod_booking.git
+    path: core/moodle/mod/booking
+    branch: main
+  - name: Attendance Activity
+    url: https://github.com/danmarsden/moodle-mod_attendance.git
+    path: core/moodle/mod/attendance
+    branch: MOODLE_404_STABLE
+  - name: Table Wunderbyte Local
+    url: https://github.com/Wunderbyte-GmbH/moodle-local_wunderbyte_table.git
+    path: core/moodle/local/wunderbyte_table
+    branch: main
+  - name: Panopto Block
+    url: https://github.com/Panopto/Moodle-2.0-plugin-for-Panopto.git
+    path: core/moodle/blocks/panopto
+    branch: master
+  - name: Course Format Grid
+    url: https://github.com/gjbarnard/moodle-format_grid.git
+    path: core/moodle/course/format/grid
+    branch: main
+  - name: Panopto Button Atto
+    url: https://github.com/Panopto/Panopto-Button-for-Atto.git
+    path: core/moodle/lib/atto/panopto
+    branch: master
 database:
   - name: pgsql
