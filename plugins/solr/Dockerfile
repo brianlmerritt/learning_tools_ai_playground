@@ -11,12 +11,18 @@ RUN apt-get update && apt-get install -y wget curl && \
 # Copy custom configuration files
 COPY solr_config/solrconfig.xml /opt/solr/server/solr/configsets/_default/conf/
 COPY solr_config/managed-schema /opt/solr/server/solr/configsets/_default/conf/
+COPY solr_config/stopwords.txt /opt/solr/server/solr/configsets/_default/conf/
+COPY solr_config/synonyms.txt /opt/solr/server/solr/configsets/_default/conf/
 
 # Set proper permissions for the copied files
 RUN chown solr:solr /opt/solr/server/solr/configsets/_default/conf/solrconfig.xml \
-    /opt/solr/server/solr/configsets/_default/conf/managed-schema && \
+    /opt/solr/server/solr/configsets/_default/conf/managed-schema \
+    /opt/solr/server/solr/configsets/_default/conf/stopwords.txt \
+    /opt/solr/server/solr/configsets/_default/conf/synonyms.txt && \
     chmod 644 /opt/solr/server/solr/configsets/_default/conf/solrconfig.xml \
-    /opt/solr/server/solr/configsets/_default/conf/managed-schema
+    /opt/solr/server/solr/configsets/_default/conf/managed-schema \
+    /opt/solr/server/solr/configsets/_default/conf/stopwords.txt \
+    /opt/solr/server/solr/configsets/_default/conf/synonyms.txt
 
 # Copy custom entrypoint script
 COPY solr-entrypoint.sh /usr/local/bin/solr-entrypoint.sh

@@ -6,7 +6,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - "${VOLUMES_HOME}/elasticsearch_data:/usr/share/elasticsearch/data"
+      - elasticsearch_data:/usr/share/elasticsearch/data
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -18,6 +18,7 @@ services:
     restart: "on-failure:0"
     networks:
       - moodle_network
+    user: "1000:1000"  # Use a specific user ID instead of environment variables
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.10.4
@@ -36,6 +37,7 @@ services:
 
 volumes:
   elasticsearch_data:
+    driver: local
 
 networks:
   moodle_network:

@@ -1,0 +1,4 @@
+# Some example synonym pairs
+GB,gib,gigabyte,gigabytes
+MB,mib,megabyte,megabytes
+Television, TV, telly

@@ -1,9 +1,11 @@
 #!/bin/bash
 set -e
 
-# Correct permissions for the Elasticsearch data directory
-# mkdir -p /usr/share/elasticsearch/data
-# chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
+# Ensure correct permissions for the Elasticsearch data directory
+if [ "$(id -u)" != "1000" ]; then
+    echo "Changing ownership of /usr/share/elasticsearch/data to 1000:1000"
+    chown -R 1000:1000 /usr/share/elasticsearch/data
+fi
 
 # Execute the original entrypoint script with all arguments
-exec /usr/local/bin/docker-entrypoint.sh "$@"
+exec /usr/share/elasticsearch/bin/elasticsearch "$@"
