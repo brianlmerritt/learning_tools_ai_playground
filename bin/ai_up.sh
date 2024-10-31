@@ -23,14 +23,19 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-# Add Nvidia Drivers if needed
-use_nvidia=$(yq -r '.use_nvidia' "$SUBMODULES_FILE")
-if [ "$use_nvidia" = "true" ]; then
-    export USE_NVIDIA=true
-    echo "Nvidia support enabled"
+# Use the USE_NVIDIA environment variable set by setup_environment.sh
+if [ "$USE_NVIDIA" = "true" ]; then
+    echo "Nvidia support enabled by setup_environment.sh"
 else
-    export USE_NVIDIA=false
-    echo "Nvidia support disabled"
+    # Check the plugins.yaml file as a fallback
+    use_nvidia=$(yq -r '.use_nvidia' "$SUBMODULES_FILE")
+    if [ "$use_nvidia" = "true" ]; then
+        export USE_NVIDIA=true
+        echo "Nvidia support enabled by plugins.yaml"
+    else
+        export USE_NVIDIA=false
+        echo "Nvidia support disabled"
+    fi
 fi
 
 # Get the Moodle Docker network name
@@ -72,6 +77,12 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
         # Extract the YAML file name from the docker command
         yaml_file=$(echo "$docker_command" | sed -n 's/.*-f \([^ ]*\).*/\1/p')
         if [ -n "$yaml_file" ]; then
+            # If USE_NVIDIA is true and the plugin is ollama, use the nvidia yaml file
+            if [ "$USE_NVIDIA" = "true" ] && [ "$name" = "ollama" ]; then
+                yaml_file="${yaml_file/docker-compose.yaml/docker-compose-nvidia.yaml}"
+                docker_command="${docker_command/docker-compose.yaml/docker-compose-nvidia.yaml}"
+                echo "Using docker-compose-nvidia.yaml for Ollama"
+            fi
             # Add or update the network configuration in the YAML file
             if ! grep -q "networks:" "$yaml_file"; then
                 echo "networks:" >> "$yaml_file"

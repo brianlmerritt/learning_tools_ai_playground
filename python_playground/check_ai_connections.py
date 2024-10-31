@@ -5,7 +5,9 @@ from openai import OpenAI
 import anthropic
 from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
 from huggingface_hub import HfApi
+import requests
 from requests.exceptions import HTTPError
+import json
 
 # Define network hosts and ports
 weaviate_host = "weaviate"
@@ -29,11 +31,17 @@ def check_port(host, port, name):
         result = sock.connect_ex((host, port))
         sock.close()
         if result == 0:
-            print(f"{name}: 'Available'")
+            status = f"{name}: 'Available'"
+            print(status)
+            return status
         else:
-            print(f"{name}: 'NOT Available'")
+            status = f"{name}: 'NOT Available'"
+            print(status)
+            return status
     except Exception as e:
-        print(f"{name} is NOT reachable ({e})")
+        status = f"{name} is NOT reachable ({e})"
+        print(status)
+        return status
 
 # Check AI services
 print("Checking AI services:")
@@ -94,7 +102,39 @@ print("\nChecking database services:")
 check_port(weaviate_host, weaviate_port, "Weaviate")
 check_port(elasticsearch_host, elasticsearch_port, "ElasticSearch")
 check_port(solr_host, solr_port, "SOLR")
-check_port(ollama_host, ollama_port, "OLLAMA")
 check_port(tika_host, tika_port, "Tika")
 
+status = check_port(ollama_host, ollama_port, "OLLAMA")
+if status == "OLLAMA: 'Available'":
+    try:
+        # Send a request to Ollama to check GPU availability
+        response = requests.get(f"http://{ollama_host}:{ollama_port}/api/tags")
+        
+        if response.status_code == 200:
+            models = response.json().get("models", [])
+            print("Available OLLAMA models:")
+            for model in models:
+                print(f"- {model.get('name', 'Unknown')}")
+                print("  Details:", model.get('details', {}))  # Print just the details portion
+
+            # Keep version info
+            status_response = requests.get(f"http://{ollama_host}:{ollama_port}/api/version")
+            print("\nOLLAMA Status response code:", status_response.status_code)
+            print("OLLAMA Status response:", status_response.text)
+                
+        else:
+            print(f"OLLAMA Check: Failed (Status code: {response.status_code})")
+    except Exception as e:
+        print(f"OLLAMA Check Failed ({e})")
+
+else:
+    print(status)
 print("\nCheck complete.")
+
+if status == "OLLAMA: 'Available'":
+    try:
+        generate_response = requests.get(f"http://{ollama_host}:{ollama_port}/api/embeddings")
+        print("\nOLLAMA Embeddings response code:", generate_response.status_code)
+        print("OLLAMA Embeddings response:", generate_response.text)
+    except Exception as e:
+        print(f"OLLAMA Embeddings Check Failed ({e})")

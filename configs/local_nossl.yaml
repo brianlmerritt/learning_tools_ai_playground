@@ -1,0 +1,27 @@
+services:
+  webserver:
+    environment:
+      MOODLE_DOCKER_SSL: "false"
+      MOODLE_SSLPROXY: "false"
+      MOODLE_DOCKER_WEB_HOST: "localhost"
+      MOODLE_DOCKER_WEB_PROTOCOL: "http"
+      MOODLE_DOCKER_WEB_PORT: "8000"
+      MOODLE_DOCKER_SSL_OVERRIDE: "false"
+    command: >
+      sh -c "
+        (while true; do php /var/www/html/admin/cli/cron.php; done) &
+        apache2-foreground
+      "
+    volumes:
+      - ${MOODLE_DOCKER_WWWROOT}:/var/www/html
+
+  db:
+    volumes:
+      - moodledb_data:/var/lib/postgresql/data
+
+volumes:
+  moodledb_data:
+
+networks:
+  default:
+    name: ${MOODLE_DOCKER_NETWORK:-moodle-docker_default}

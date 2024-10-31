@@ -68,8 +68,10 @@ if [ "${MOODLE_DOCKER_SSL_OVERRIDE}" = "true" ]; then
 fi
 
 
-if [ -f "$CONFIGS_DIR/local.yaml" ]; then
-    cp "$CONFIGS_DIR/local.yaml" "$MOODLE_DOCKER_DIR/local.yml"
+if [ "${MOODLE_DOCKER_SSL}" = "true" ]; then
+    cp "$CONFIGS_DIR/local_ssl.yaml" "$MOODLE_DOCKER_DIR/local.yml"
+else
+    cp "$CONFIGS_DIR/local_nossl.yaml" "$MOODLE_DOCKER_DIR/local.yml"
 fi
 
 cd $MOODLE_DOCKER_DIR
