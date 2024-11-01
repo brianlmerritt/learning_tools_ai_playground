@@ -23,18 +23,6 @@ submodules:
     url: https://github.com/catalyst/moodle-local_aws.git
     path: core/moodle/local/aws
     branch: master
-  - name: mAIci Moodle Chat Interface
-    url: https://github.com/caiocarvalhofre/mod_maici.git
-    path: core/moodle/mod/maici
-    branch: main
-  - name: Moodle Search Solr RAG
-    url: https://github.com/mhughes2k/moodle-search_solrrag.git
-    path: core/moodle/search/engine/solrrag
-    branch: master
-  - name: Moodle Local AI
-    url: https://github.com/mhughes2k/moodle-local_ai.git
-    path: core/moodle/local/ai
-    branch: master
   - name: Moodle Course Format Topcoll
     url: https://github.com/gjbarnard/moodle-format_topcoll.git
     path: core/moodle/course/format/topcoll
@@ -95,5 +83,9 @@ submodules:
     url: https://github.com/Panopto/Panopto-Button-for-Atto.git
     path: core/moodle/lib/atto/panopto
     branch: master
+  - name: Course Format Flexsections
+    url: https://github.com/marinaglancy/moodle-format_flexsections.git
+    path: core/moodle/course/format/flexsections
+    branch: MOODLE_401_STABLE
 database:
   - name: pgsql

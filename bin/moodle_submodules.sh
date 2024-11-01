@@ -66,11 +66,28 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
             stripped_path="${path#*core/moodle/}"
             cd "$MOODLE_DIR"
             echo "Adding submodule $name at $path"
-            git submodule add --branch "$branch" "$url" "$stripped_path"
+            # Check if submodule already exists in .gitmodules
+            if grep -q "path = $stripped_path" .gitmodules 2>/dev/null; then
+                echo "Submodule already exists, updating instead..."
+                git submodule update --init --recursive "$stripped_path"
+                if [ $branch != "null" ]; then
+                    (cd "$stripped_path" && git checkout "$branch")
+                fi
+            else
+                git submodule add --branch "$branch" "$url" "$stripped_path"
+            fi
         else
             cd "$MOODLE_DIR"
             echo "Adding submodule $name at $path"
-            git submodule add --branch "$branch" "$url" "$path"
+            if grep -q "path = $path" .gitmodules 2>/dev/null; then
+                echo "Submodule already exists, updating instead..."
+                git submodule update --init --recursive "$path"
+                if [ $branch != "null" ]; then
+                    (cd "$path" && git checkout "$branch")
+                fi
+            else
+                git submodule add --branch "$branch" "$url" "$path"
+            fi
         fi
     fi
 done
