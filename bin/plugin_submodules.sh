@@ -28,6 +28,8 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     name=$(echo "$submodule" | jq -r '.name')
     url=$(echo "$submodule" | jq -r '.url')
     path=$(echo "$submodule" | jq -r '.path')
+    branch=$(echo "$submodule" | jq -r '.branch')
+    tag=$(echo "$submodule" | jq -r '.tag')
 
     # Extract the plugin directory name
     plugin_directory_name=$(echo "$path" | awk -F'/' '{print $2}')
@@ -37,17 +39,37 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     if [ -f "$plugin_path/docker-compose.yaml" ]; then
         echo "$name: docker-compose.yaml exists"
     elif [ -d "$plugin_path" ]; then
-        # Check if git pull is needed
         cd "$plugin_path"
-        git fetch
-        if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
-            echo "$name: git pull needed"
+        if [ $branch == "null" ]; then
+            # Handle tag-based checkout
+            branchExists=$(git show-ref refs/heads/plugin$tag)
+            if [ -n "$branchExists" ]; then
+                git checkout plugin$tag
+            else
+                git checkout -b plugin$tag $tag
+            fi
         else
-            echo "$name: up to date"
+            # Handle branch-based checkout
+            git checkout $branch
+            git pull origin $branch
         fi
         cd "$ROOT_DIR"
     else
-        echo "$name: needs to be cloned"
+        echo "Adding plugin $name at $plugin_path"
+        # Clone new repository
+        if [ $branch != "null" ]; then
+            git clone --branch "$branch" "$url" "$plugin_path"
+        else
+            git clone "$url" "$plugin_path"
+            cd "$plugin_path"
+            branchExists=$(git show-ref refs/heads/plugin$tag)
+            if [ -n "$branchExists" ]; then
+                git checkout plugin$tag
+            else
+                git checkout -b plugin$tag $tag
+            fi
+            cd "$ROOT_DIR"
+        fi
     fi
 done
 

@@ -1,0 +1,15 @@
+{
+    "name": "moodle/php-ai-playground",
+    "description": "PHP AI Playground for testing AI integrations",
+    "type": "project",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Moodle Dev",
+            "email": "dev@moodle.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.9"
+    }
+}

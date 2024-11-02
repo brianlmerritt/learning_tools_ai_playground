@@ -1,0 +1,28 @@
+services:
+  php_ai_dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: php_ai_dev
+    container_name: php_ai_playground
+    environment:
+      - OPENAI_API_KEY
+      - ANTHROPIC_API_KEY
+      - HUGGINGFACE_API_KEY
+    volumes:
+      - ../../php_playground:/home/phpdev/workspace
+    user: phpdev
+    working_dir: /home/phpdev/workspace
+    # entrypoint: /usr/local/bin/docker-entrypoint.sh
+    command: /bin/bash
+    tty: true
+    networks:
+      - moodle_network
+
+volumes:
+  php_playground:
+
+networks:
+  moodle_network:
+    external: true
+    name: ${MOODLE_NETWORK:-moodle-docker_default} 
