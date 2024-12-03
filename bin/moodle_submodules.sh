@@ -65,7 +65,7 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
         if [[ $path == *"core/moodle/"* ]]; then
             stripped_path="${path#*core/moodle/}"
             cd "$MOODLE_DIR"
-            echo "Adding submodule $name at $path"
+            echo "Adding another submodule $name at $path"
             # Check if submodule already exists in .gitmodules
             if grep -q "path = $stripped_path" .gitmodules 2>/dev/null; then
                 echo "Submodule already exists, updating instead..."
@@ -74,11 +74,18 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
                     (cd "$stripped_path" && git checkout "$branch")
                 fi
             else
-                git submodule add --branch "$branch" "$url" "$stripped_path"
+                basename="${stripped_path##*/}"
+                shorter_path="${stripped_path%/*}"  # This removes the last folder from stripped_path
+                if [ -d "$shorter_path" ]; then
+                    cd "$shorter_path"
+                    git submodule add -f --branch "$branch" "$url" "./$basename"
+                else
+                    git submodule add --branch "$branch" "$url" "$stripped_path"
+                fi
             fi
         else
             cd "$MOODLE_DIR"
-            echo "Adding submodule $name at $path"
+            echo "Adding new submodule $name at $path"
             if grep -q "path = $path" .gitmodules 2>/dev/null; then
                 echo "Submodule already exists, updating instead..."
                 git submodule update --init --recursive "$path"
@@ -93,5 +100,3 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
 done
 
 cd "$ROOT_DIR"
-
-
