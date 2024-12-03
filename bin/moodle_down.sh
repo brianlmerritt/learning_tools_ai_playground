@@ -6,6 +6,7 @@ CONFIGS_DIR="$ROOT_DIR/configs"
 MOODLE_DIR="$ROOT_DIR/core/moodle"
 MOODLE_DOCKER_DIR="$ROOT_DIR/core/moodle-docker"
 MOODLE_YAML="$CONFIGS_DIR/moodle.yaml"
+source $ROOT_DIR/bin/setup_environment.sh
 
 export MOODLE_DOCKER_WWWROOT="$ROOT_DIR/core/moodle"
 

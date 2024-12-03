@@ -1,24 +1,24 @@
 submodules:
   - name: Weaviate
     path: plugins/weaviate
-    docker: "docker compose up -d"
+    docker: "docker-compose up -d"
   - name: Ollama
     path: plugins/ollama
     branch: main
-    docker: "docker compose -f docker-compose-nvidia.yaml up -d" # use docker-compose-cpu.yaml for CPU or docker-compose-nvidia.yaml if using GPU
+    docker: "docker-compose -f docker-compose-nvidia.yaml up -d" # use docker-compose-cpu.yaml for CPU or docker-compose-nvidia.yaml if using GPU
   - name: ElasticSearch
     path: plugins/elasticsearch
-    docker: "docker compose up --build -d"
+    docker: "docker-compose up --build -d"
   - name: SOLR Search
     path: plugins/solr
-    docker: "docker compose up --build -d"
+    docker: "docker-compose up --build -d"
   - name: Apache Tika
     path: plugins/apache_tika
-    docker: "docker compose up -d"
+    docker: "docker-compose up -d"
   - name: Python Playground
     path: plugins/python_ai_playground
-    docker: "docker compose up --build -d"
+    docker: "docker-compose up --build -d"
   - name: PHP Playground
     path: plugins/php_ai_playground
-    docker: "docker compose up --build -d"
+    docker: "docker-compose up --build -d"
 use_nvidia: true

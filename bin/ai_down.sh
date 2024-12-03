@@ -6,6 +6,7 @@ ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 CONFIGS_DIR="$ROOT_DIR/configs"
 PLUGINS_DIR="$ROOT_DIR/plugins"
 SUBMODULES_FILE="$CONFIGS_DIR/plugins.yaml"
+source $ROOT_DIR/bin/setup_environment.sh
 
 # Check if VOLUMES_HOME is set, if not, set it to the project root ai_volumes directory
 if [ -z "$VOLUMES_HOME" ]; then
@@ -33,8 +34,8 @@ else
     echo "Nvidia support disabled"
 fi
 
-# Read the submodules from the YAML file
-submodules=$(yq '.submodules' "$SUBMODULES_FILE")
+# Read the submodules from the YAML file and convert to JSON format
+submodules=$(yq -o=json '.submodules' "$SUBMODULES_FILE")
 
 # Parse the JSON array in a loop
 echo "$submodules" | jq -c '.[]' | while read -r submodule; do
