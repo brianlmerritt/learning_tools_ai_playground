@@ -7,3 +7,5 @@ plugins/working_temp/*
 moodle_backups/*.mbz
 *.crt
 *.key
+*copy.sh
+*copy.py

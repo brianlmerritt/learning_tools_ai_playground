@@ -47,7 +47,9 @@ fi
 echo "Using Moodle Docker network: $MOODLE_NETWORK"
 
 # Read the submodules from the YAML file
-submodules=$(yq '.submodules' "$SUBMODULES_FILE")
+# submodules=$(yq '.submodules' "$SUBMODULES_FILE")
+submodules=$(yq -o=json '.submodules' "$SUBMODULES_FILE")
+
 
 # Parse the JSON array in a loop
 echo "$submodules" | jq -c '.[]' | while read -r submodule; do

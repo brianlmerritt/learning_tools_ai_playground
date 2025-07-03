@@ -34,8 +34,9 @@ else
     echo "Nvidia support disabled"
 fi
 
-# Read the submodules from the YAML file and convert to JSON format
+
 submodules=$(yq -o=json '.submodules' "$SUBMODULES_FILE")
+# submodules=$(yq -o json '.submodules' "$SUBMODULES_FILE")
 
 # Parse the JSON array in a loop
 echo "$submodules" | jq -c '.[]' | while read -r submodule; do

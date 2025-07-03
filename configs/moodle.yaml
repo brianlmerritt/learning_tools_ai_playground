@@ -107,5 +107,9 @@ submodules:
     url: https://github.com/ponlawat-w/moodle-accessibility_backgroundcolour.git
     path: core/moodle/local/accessibility/widgets/backgroundcolour
     branch: release
+  - name: RVC Simple Feedback Rubric
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-gradingform_simplefeedbackrubric.git
+    path: core/moodle/grade/grading/form/simplefeedbackrubric
+    branch: main
 database:
   - name: pgsql
