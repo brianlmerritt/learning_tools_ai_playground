@@ -1,25 +1,51 @@
 submodules:
   - name: Weaviate
     path: plugins/weaviate
+    url: https://github.com/brianlmerritt/ltaiplugin-weaviate.git
+    submodule: true
+    branch: main
     docker: "docker-compose up -d"
   - name: Ollama
     path: plugins/ollama
+    url: https://github.com/brianlmerritt/ltaiplugin-ollama.git
+    submodule: true
     branch: main
     docker: "docker-compose -f docker-compose-nvidia.yaml up -d" # use docker-compose-cpu.yaml for CPU or docker-compose-nvidia.yaml if using GPU
   - name: ElasticSearch
     path: plugins/elasticsearch
-    docker: "docker-compose up --build -d"
+    url: https://github.com/brianlmerritt/ltaiplugin-elasticsearch.git
+    submodule: true
+    branch: main
+    docker: "docker-compose up -d"
+  - name: ElasticSearch
+    path: plugins/elasticsearch
+    url: https://github.com/brianlmerritt/ltaiplugin-elasticsearch.git
+    submodule: true
+    branch: main
+    docker: "docker-compose up -d"
   - name: SOLR Search
     path: plugins/solr
+    url: https://github.com/brianlmerritt/ltaiplugin-solr.git
+    submodule: true
+    branch: main
     docker: "docker-compose up --build -d"
   - name: Apache Tika
     path: plugins/apache_tika
+    url: https://github.com/brianlmerritt/ltaiplugin-apache-tika.git
+    submodule: true
+    branch: main
     docker: "docker-compose up -d"
   - name: Python Playground
     path: plugins/python_ai_playground
+    url: https://github.com/brianlmerritt/ltaiplugin-python-ai-playground.git
+    submodule: true
+    branch: main
     docker: "docker-compose up --build -d"
   - name: PHP Playground
     path: plugins/php_ai_playground
+    url: https://github.com/brianlmerritt/ltaiplugin-php-ai-playground.git
+    submodule: true
+    branch: main
     docker: "docker-compose up --build -d"
   - name: SOLR NGINX LUA Proxy
     path: plugins/solr_nginx_lua_proxy
