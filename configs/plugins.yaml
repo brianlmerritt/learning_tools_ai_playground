@@ -21,4 +21,19 @@ submodules:
   - name: PHP Playground
     path: plugins/php_ai_playground
     docker: "docker-compose up --build -d"
+  - name: SOLR NGINX LUA Proxy
+    path: plugins/solr_nginx_lua_proxy
+    url: https://github.com/brianlmerritt/solr-nginx-lua-subsystem.git
+    submodule: true
+    branch: main
+  - name: Embeddings Workers Subsystem
+    path: plugins/embeddings_workers_subsystem
+    url: https://github.com/brianlmerritt/embeddings-workers-subsystem.git
+    submodule: true
+    branch: main
+  - name: RAG Retrieval Subsystem
+    path: plugins/rag_retrieval_subsystem
+    url: https://github.com/brianlmerritt/rag-retrieval-subsystem.git
+    submodule: true
+    branch: main
 use_nvidia: true

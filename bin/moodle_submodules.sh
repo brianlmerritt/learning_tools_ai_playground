@@ -21,7 +21,7 @@ fi
 cd "$ROOT_DIR"
 
 # Read the submodules from the YAML file
-submodules=$(yq '.submodules' "$SUBMODULES_FILE" )
+submodules=$(yq -o=json '.submodules' "$SUBMODULES_FILE" )
 
 
 # Parse the JSON array in a loop

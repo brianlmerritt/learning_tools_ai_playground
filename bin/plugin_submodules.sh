@@ -21,7 +21,7 @@ fi
 cd "$ROOT_DIR"
 
 # Read the submodules from the YAML file
-submodules=$(yq '.submodules' "$SUBMODULES_FILE")
+submodules=$(yq -o=json '.submodules' "$SUBMODULES_FILE")
 
 # Parse the JSON array in a loop
 echo "$submodules" | jq -c '.[]' | while read -r submodule; do
@@ -30,17 +30,36 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     path=$(echo "$submodule" | jq -r '.path')
     branch=$(echo "$submodule" | jq -r '.branch')
     tag=$(echo "$submodule" | jq -r '.tag')
+    is_submodule=$(echo "$submodule" | jq -r '.submodule')
 
-    # Extract the plugin directory name
-    plugin_directory_name=$(echo "$path" | awk -F'/' '{print $2}')
+    # Convert dashes to underscores in the plugin directory name
+    plugin_directory_name=$(echo "$path" | awk -F'/' '{print $2}' | tr '-' '_')
     plugin_path="$PLUGINS_DIR/$plugin_directory_name"
+
+    if [ "$is_submodule" = "true" ] && [ -n "$url" ]; then
+        # If the submodule directory does not exist, add as a git submodule
+        if [ ! -d "$plugin_path" ]; then
+            echo "Adding git submodule for $name at $plugin_path from $url"
+            git submodule add "$url" "$plugin_path"
+        else
+            echo "Submodule $name already exists at $plugin_path"
+        fi
+        # Optionally checkout branch if specified
+        if [ "$branch" != "null" ] && [ -d "$plugin_path/.git" ]; then
+            cd "$plugin_path"
+            git checkout "$branch"
+            git pull origin "$branch"
+            cd "$ROOT_DIR"
+        fi
+        continue
+    fi
 
     # Check if docker-compose.yaml exists
     if [ -f "$plugin_path/docker-compose.yaml" ]; then
         echo "$name: docker-compose.yaml exists"
     elif [ -d "$plugin_path" ]; then
         cd "$plugin_path"
-        if [ $branch == "null" ]; then
+        if [ "$branch" == "null" ]; then
             # Handle tag-based checkout
             branchExists=$(git show-ref refs/heads/plugin$tag)
             if [ -n "$branchExists" ]; then
@@ -57,7 +76,7 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     else
         echo "Adding plugin $name at $plugin_path"
         # Clone new repository
-        if [ $branch != "null" ]; then
+        if [ "$branch" != "null" ]; then
             git clone --branch "$branch" "$url" "$plugin_path"
         else
             git clone "$url" "$plugin_path"
