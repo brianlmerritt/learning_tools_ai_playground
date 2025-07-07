@@ -25,7 +25,7 @@ submodules:
     docker: "docker-compose up -d"
   - name: SOLR Search
     path: plugins/solr
-    url: https://github.com/brianlmerritt/ltaiplugin-solr.git
+    url: https://github.com/brianlmerritt/ltaiplugin-vanilla-solr.git
     submodule: true
     branch: main
     docker: "docker-compose up --build -d"
@@ -37,13 +37,13 @@ submodules:
     docker: "docker-compose up -d"
   - name: Python Playground
     path: plugins/python_ai_playground
-    url: https://github.com/brianlmerritt/ltaiplugin-python-ai-playground.git
+    url: https://github.com/brianlmerritt/ltaiplugin-python-playground.git
     submodule: true
     branch: main
     docker: "docker-compose up --build -d"
   - name: PHP Playground
     path: plugins/php_ai_playground
-    url: https://github.com/brianlmerritt/ltaiplugin-php-ai-playground.git
+    url: https://github.com/brianlmerritt/ltaiplugin-php-playground.git
     submodule: true
     branch: main
     docker: "docker-compose up --build -d"

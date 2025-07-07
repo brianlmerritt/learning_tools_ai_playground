@@ -4,3 +4,30 @@
 [submodule "core/moodle"]
 	path = core/moodle
 	url = https://github.com/moodle/moodle.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/weaviate"]
+	path = /home/learn/learning_tools_ai_playground/plugins/weaviate
+	url = https://github.com/brianlmerritt/ltaiplugin-weaviate.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/ollama"]
+	path = /home/learn/learning_tools_ai_playground/plugins/ollama
+	url = https://github.com/brianlmerritt/ltaiplugin-ollama.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/solr"]
+	path = /home/learn/learning_tools_ai_playground/plugins/solr
+	url = https://github.com/brianlmerritt/ltaiplugin-vanilla-solr.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/apache_tika"]
+	path = /home/learn/learning_tools_ai_playground/plugins/apache_tika
+	url = https://github.com/brianlmerritt/ltaiplugin-apache-tika.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/python_ai_playground"]
+	path = /home/learn/learning_tools_ai_playground/plugins/python_ai_playground
+	url = https://github.com/brianlmerritt/ltaiplugin-python-playground.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/php_ai_playground"]
+	path = /home/learn/learning_tools_ai_playground/plugins/php_ai_playground
+	url = https://github.com/brianlmerritt/ltaiplugin-php-playground.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/solr_nginx_lua_proxy"]
+	path = /home/learn/learning_tools_ai_playground/plugins/solr_nginx_lua_proxy
+	url = https://github.com/brianlmerritt/solr-nginx-lua-subsystem.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/embeddings_workers_subsystem"]
+	path = /home/learn/learning_tools_ai_playground/plugins/embeddings_workers_subsystem
+	url = https://github.com/brianlmerritt/embeddings-workers-subsystem.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/rag_retrieval_subsystem"]
+	path = /home/learn/learning_tools_ai_playground/plugins/rag_retrieval_subsystem
+	url = https://github.com/brianlmerritt/rag-retrieval-subsystem.git
