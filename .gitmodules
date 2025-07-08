@@ -31,3 +31,6 @@
 [submodule "/home/learn/learning_tools_ai_playground/plugins/rag_retrieval_subsystem"]
 	path = /home/learn/learning_tools_ai_playground/plugins/rag_retrieval_subsystem
 	url = https://github.com/brianlmerritt/rag-retrieval-subsystem.git
+[submodule "/home/learn/learning_tools_ai_playground/plugins/elasticsearch"]
+	path = /home/learn/learning_tools_ai_playground/plugins/elasticsearch
+	url = https://github.com/brianlmerritt/ltaiplugin-elastic-search.git
