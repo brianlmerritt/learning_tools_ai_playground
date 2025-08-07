@@ -68,11 +68,13 @@ while IFS= read -r submodule; do
     docker_command=$(echo "$submodule" | jq -r '.docker')
     is_submodule=$(echo "$submodule" | jq -r '.submodule')
     ignore=$(echo "$submodule" | jq -r '.ignore')
+    build=$(echo "$submodule" | jq -r '.build')
 
     # Output the extracted information
     echo "Name: $name"
     echo "Path: $path"
     echo "Docker Command: $docker_command"
+    echo "Build: $build"
 
     # Check if ignore is true FIRST
     if [ "$ignore" = "true" ]; then
@@ -143,9 +145,35 @@ EOF
             yq eval '.networks' "$yaml_file"
         fi
         
+        # Modify docker command if build flag is true
+        if [ "$build" = "true" ]; then
+            echo "Build flag is true for $name, adding --build to docker command"
+            # Insert --build into the docker command
+            # Handle the case where the command already has --build
+            if [[ "$docker_command" == *"--build"* ]]; then
+                echo "Command already contains --build flag"
+                modified_docker_command="$docker_command"
+            else
+                # Insert --build after "docker compose up" or "docker-compose up"
+                if [[ "$docker_command" == *"docker compose up"* ]]; then
+                    modified_docker_command="${docker_command/docker compose up/docker compose up --build}"
+                elif [[ "$docker_command" == *"docker-compose up"* ]]; then
+                    modified_docker_command="${docker_command/docker-compose up/docker-compose up --build}"
+                else
+                    # Fallback: just use original command
+                    modified_docker_command="$docker_command"
+                fi
+            fi
+            echo "Modified docker command: $modified_docker_command"
+        else
+            modified_docker_command="$docker_command"
+        fi
+        
         # Run the docker compose command with explicit environment variable
         # Also ensure we're using the latest docker compose syntax
-        MOODLE_NETWORK="$MOODLE_NETWORK" docker compose ${docker_command#docker compose }
+        # Remove "docker compose " from the beginning of the command since we're adding it back
+        command_args="${modified_docker_command#docker compose }"
+        MOODLE_NETWORK="$MOODLE_NETWORK" docker compose $command_args
     else
         echo "No docker command specified for $name"
     fi
