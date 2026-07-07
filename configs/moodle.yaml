@@ -11,10 +11,6 @@ submodules:
     url: https://github.com/catalyst/moodle-search_elastic.git
     path: core/moodle/search/engine/elastic
     branch: MOODLE_310_STABLE
-  - name: PostgresFullTextSearch
-    url: https://github.com/catalyst/moodle-search_postgresfulltext.git
-    path: core/moodle/search/engine/postgresfulltext
-    branch: main
   - name: Azure Search
     url: https://github.com/catalyst/moodle-search_azure.git
     path: core/moodle/search/engine/azure
@@ -110,6 +106,10 @@ submodules:
   - name: RVC Simple Feedback Rubric
     url: https://github.com/RVC-Learn-Digital-Team/moodle-gradingform_simplefeedbackrubric.git
     path: core/moodle/grade/grading/form/simplefeedbackrubric
+    branch: main
+  - name: RVC Local Sofia Curriculum Mapping
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-local_curricmap.git
+    path: core/moodle/local/curricmap
     branch: main
 database:
   - name: pgsql
