@@ -73,4 +73,4 @@ submodules:
     branch: main
     docker: "docker compose up -d"
     build: true
-use_nvidia: true
+use_nvidia: false

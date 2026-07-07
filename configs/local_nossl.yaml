@@ -7,6 +7,8 @@ services:
       MOODLE_DOCKER_WEB_PROTOCOL: "http"
       MOODLE_DOCKER_WEB_PORT: "8000"
       MOODLE_DOCKER_SSL_OVERRIDE: "false"
+      # Use chromium so Behat tests match the arm64-native selenium image below
+      MOODLE_DOCKER_BROWSER: "chrome"
     command: >
       sh -c "
         (while true; do php /var/www/html/admin/cli/cron.php; done) &
@@ -14,6 +16,11 @@ services:
       "
     volumes:
       - ${MOODLE_DOCKER_WWWROOT}:/var/www/html
+
+  # Override the default amd64-only firefox image with a native arm64 Chromium image.
+  # seleniarm/standalone-chromium is the official arm64 Selenium image for Apple Silicon.
+  selenium:
+    image: seleniarm/standalone-chromium:latest
 
   db:
     volumes:

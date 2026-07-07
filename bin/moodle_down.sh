@@ -15,9 +15,11 @@ database_name=$(yq -r '.database[0].name' "$MOODLE_YAML")
 # Export the database name as an environment variable
 export MOODLE_DOCKER_DB=$database_name
 
-# Shutdown the nginx proxy
-cd $ROOT_DIR/core/nginx_proxy
-docker compose down
+# Shutdown the nginx proxy (SSL mode only)
+if [ "${MOODLE_DOCKER_SSL}" = "true" ]; then
+    cd $ROOT_DIR/core/nginx_proxy
+    docker compose down
+fi
 
 cd $MOODLE_DOCKER_DIR
 

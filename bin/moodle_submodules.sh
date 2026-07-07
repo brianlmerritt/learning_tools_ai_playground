@@ -17,11 +17,18 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
+# Detect yq flavor: mikefarah/yq needs -o=json; Python yq (kislyuk) outputs JSON by default
+if yq --version 2>&1 | grep -qi 'mikefarah'; then
+    YQ_JSON_FLAG="-o=json"
+else
+    YQ_JSON_FLAG=""
+fi
+
 # Navigate to the Moodle repository
 cd "$ROOT_DIR"
 
 # Read the submodules from the YAML file
-submodules=$(yq -o=json '.submodules' "$SUBMODULES_FILE" )
+submodules=$(yq $YQ_JSON_FLAG '.submodules' "$SUBMODULES_FILE")
 
 
 # Parse the JSON array in a loop
@@ -41,7 +48,14 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     echo "Tag: $tag"
     echo # Just for an empty line for readability
 
-    # Check if the submodule directory exists
+    # Check if the submodule directory exists AND is a valid git repository.
+    # A directory that exists but is not a git repo (e.g. from an interrupted
+    # previous clone) is removed so the plugin can be properly cloned below.
+    if [ -d "$path" ] && ! git -C "$path" rev-parse --git-dir > /dev/null 2>&1; then
+        echo "Directory $path exists but is not a git repo — removing and re-cloning"
+        rm -rf "$path"
+    fi
+
     if [ -d "$path" ]; then
         echo "Setting submodule $name at $path to $branch $tag"
         cd "$path"

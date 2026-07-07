@@ -17,11 +17,18 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
+# Detect yq flavor: mikefarah/yq needs -o=json; Python yq (kislyuk) outputs JSON by default
+if yq --version 2>&1 | grep -qi 'mikefarah'; then
+    YQ_JSON_FLAG="-o=json"
+else
+    YQ_JSON_FLAG=""
+fi
+
 # Navigate to the root directory
 cd "$ROOT_DIR"
 
 # Read the submodules from the YAML file
-submodules=$(yq -o=json '.submodules' "$SUBMODULES_FILE")
+submodules=$(yq $YQ_JSON_FLAG '.submodules' "$SUBMODULES_FILE")
 
 # Parse the JSON array in a loop
 echo "$submodules" | jq -c '.[]' | while read -r submodule; do
