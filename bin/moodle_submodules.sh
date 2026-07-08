@@ -71,8 +71,66 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
                 git checkout -b moodle$tag $tag
             fi
         else
-            # Branch is set so just check it out
+            # Branch is set: fetch remote and pull only if remote has changes and local files do not
+            git fetch origin
             git checkout $branch
+
+            local_sha=$(git rev-parse HEAD)
+            remote_sha=$(git rev-parse "origin/$branch" 2>/dev/null || echo "unknown")
+
+            if [ "$local_sha" != "$remote_sha" ] && [ "$remote_sha" != "unknown" ]; then
+                # Count actual user file modifications only.
+                # Excludes: submodule pointer changes (directories, not files)
+                # Excludes: .gitmodules (managed by submodule operations, not user edits)
+                modified_files=$(git diff --name-only HEAD 2>/dev/null | \
+                    while IFS= read -r filepath; do
+                        [ -f "$filepath" ] && [ "$filepath" != ".gitmodules" ] && echo "$filepath"
+                    done | wc -l | tr -d ' ')
+
+                if [ "$modified_files" -eq 0 ]; then
+                    should_pull="y"
+
+                    # moodle-docker can change base images significantly.
+                    # Ask for confirmation before pulling remote changes.
+                    if [ "$path" = "core/moodle-docker" ]; then
+                        if [ -t 0 ]; then
+                            while true; do
+                                read -r -p "Remote updates found for moodle-docker on $branch. Pull now? [y/n/q]: " reply
+                                case "${reply}" in
+                                    [Yy])
+                                        should_pull="y"
+                                        break
+                                        ;;
+                                    [Nn])
+                                        should_pull="n"
+                                        break
+                                        ;;
+                                    [Qq])
+                                        echo "Stopping script at user request."
+                                        exit 0
+                                        ;;
+                                    *)
+                                        echo "Please enter y, n, or q."
+                                        ;;
+                                esac
+                            done
+                        else
+                            should_pull="n"
+                            echo "Remote updates found for moodle-docker; non-interactive shell detected, skipping pull."
+                        fi
+                    fi
+
+                    if [ "$should_pull" = "y" ]; then
+                        echo "Pulling remote updates for $path..."
+                        git pull origin $branch
+                    else
+                        echo "Skipping remote pull for $path."
+                    fi
+                else
+                    echo "ERROR: $path has local file changes and remote changes. Manual resolution required. Aborting."
+                    exit 1
+                fi
+            fi
         fi
         cd "$ROOT_DIR"
     else

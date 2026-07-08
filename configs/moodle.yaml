@@ -2,7 +2,7 @@ submodules:
   - name: Moodle
     url: https://github.com/moodle/moodle.git
     path: core/moodle
-    tag: v4.5.3
+    branch: MOODLE_405_STABLE
   - name: Moodle Docker
     url: https://github.com/moodlehq/moodle-docker.git
     path: core/moodle-docker
@@ -10,7 +10,7 @@ submodules:
   - name: Elastic Search
     url: https://github.com/catalyst/moodle-search_elastic.git
     path: core/moodle/search/engine/elastic
-    branch: MOODLE_310_STABLE
+    branch: MOODLE_404_STABLE
   - name: Azure Search
     url: https://github.com/catalyst/moodle-search_azure.git
     path: core/moodle/search/engine/azure
@@ -22,11 +22,11 @@ submodules:
   - name: Moodle Course Format Topcoll
     url: https://github.com/gjbarnard/moodle-format_topcoll.git
     path: core/moodle/course/format/topcoll
-    branch: main
+    branch: MOODLE_405
   - name: Moodle Course Format Tiles
     url: https://bitbucket.org/dw8/moodle-format_tiles.git
     path: core/moodle/course/format/tiles
-    branch: master
+    branch: moodle45
   - name: Moodle Auto Enrolment
     url: https://github.com/bobopinna/moodle-enrol_autoenrol.git
     path: core/moodle/enrol/autoenrol
@@ -62,7 +62,7 @@ submodules:
   - name: Attendance Activity
     url: https://github.com/danmarsden/moodle-mod_attendance.git
     path: core/moodle/mod/attendance
-    branch: MOODLE_404_STABLE
+    branch: MOODLE_405_STABLE
   - name: Table Wunderbyte Local
     url: https://github.com/Wunderbyte-GmbH/moodle-local_wunderbyte_table.git
     path: core/moodle/local/wunderbyte_table
@@ -74,7 +74,7 @@ submodules:
   - name: Course Format Grid
     url: https://github.com/gjbarnard/moodle-format_grid.git
     path: core/moodle/course/format/grid
-    branch: main
+    branch: MOODLE_405
   - name: Panopto Button Atto
     url: https://github.com/Panopto/Panopto-Button-for-Atto.git
     path: core/moodle/lib/atto/panopto
@@ -110,6 +110,10 @@ submodules:
   - name: RVC Local Sofia Curriculum Mapping
     url: https://github.com/RVC-Learn-Digital-Team/moodle-local_curricmap.git
     path: core/moodle/local/curricmap
+    branch: main
+  - name: RVC Activity Module Sofia Curriculum Mapping
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-mod_curricmap.git
+    path: core/moodle/mod/curricmap
     branch: main
 database:
   - name: pgsql
