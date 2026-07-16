@@ -110,10 +110,18 @@ submodules:
   - name: RVC Local Sofia Curriculum Mapping
     url: https://github.com/RVC-Learn-Digital-Team/moodle-local_curricmap.git
     path: core/moodle/local/curricmap
-    branch: main
+    branch: tiny_curricmap
   - name: RVC Activity Module Sofia Curriculum Mapping
     url: https://github.com/RVC-Learn-Digital-Team/moodle-mod_curricmap.git
     path: core/moodle/mod/curricmap
+    branch: main
+  - name: RVC Filter Module Sofia Curriculum Mapping
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-filter_curricmap.git
+    path: core/moodle/filter/curricmap
+    branch: main
+  - name: RVC TinyMCE Editor Module Sofia Curriculum Mapping
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-tiny_curricmap.git
+    path: core/moodle/lib/editor/tiny/plugins/curricmap
     branch: main
 database:
   - name: pgsql
