@@ -1,0 +1,43 @@
+# Standalone AMD build tooling - NOT part of the running playground stack.
+#
+# Builds the curricmap plugins' amd/build/*.min.js with Moodle core's own
+# toolchain (Gruntfile + babel preset from core/moodle), replacing hand
+# transpilation. Invoke explicitly with -f; nothing here starts otherwise:
+#
+#   docker compose -f docker-compose.tools.yml run --rm amdbuild \
+#     bash -c "npm ci --no-audit && cd local/curricmap && npx grunt amd --force"
+#
+# --force is required and benign: grunt's ignorefiles task refreshes
+# /.eslintignore at the Moodle root, which is mounted read-only (the file is
+# not gitignored by core, so pre-creating it would dirty the checkout). The
+# EROFS warning it produces can be ignored; a REAL eslint error still shows
+# clearly in the output and must be fixed, not forced past.
+#
+# Components: local/curricmap | mod/curricmap | filter/curricmap
+#             lib/editor/tiny/plugins/curricmap
+#
+# Mount shape (longest path wins):
+#   /moodle                = core/moodle checkout, READ-ONLY - never written
+#   /moodle/node_modules   = named volume - npm ci lands here, survives
+#                            container rebuilds, appears in no checkout
+#   plugin paths           = the DEV repos - built files land there, ready
+#                            for normal review and push. The playground's own
+#                            pull-only plugin checkouts are shadowed inside
+#                            this container only; the webserver is unaffected.
+#
+# Node version follows core/moodle/.nvmrc (lts/jod = 22).
+
+services:
+  amdbuild:
+    image: node:22-bookworm
+    working_dir: /moodle
+    volumes:
+      - ./core/moodle:/moodle:ro
+      - amd_node_modules:/moodle/node_modules
+      - /Users/brianmerritt/dev/sofia_api_explorer/moodle-local_curricmap:/moodle/local/curricmap
+      - /Users/brianmerritt/dev/sofia_api_explorer/moodle-mod_curricmap:/moodle/mod/curricmap
+      - /Users/brianmerritt/dev/sofia_api_explorer/moodle-filter_curricmap:/moodle/filter/curricmap
+      - /Users/brianmerritt/dev/sofia_api_explorer/moodle-tiny_curricmap:/moodle/lib/editor/tiny/plugins/curricmap
+
+volumes:
+  amd_node_modules:
