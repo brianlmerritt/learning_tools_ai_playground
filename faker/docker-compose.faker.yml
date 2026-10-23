@@ -1,0 +1,16 @@
+# Faker container: generates fictional data sets from config/ into data/. It never
+# connects to the playground; bin/faker.sh loads the results. See project.md.
+#
+# Composer and fakerphp/faker are installed into the "vendor" volume on the first
+# run (internet needed). Use through bin/faker.sh, as compose project "faker".
+
+services:
+  faker:
+    image: moodlehq/moodle-php-apache:8.3
+    working_dir: /faker
+    volumes:
+      - ./:/faker
+      - vendor:/faker/vendor
+
+volumes:
+  vendor:

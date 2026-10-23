@@ -13,8 +13,8 @@ the two tools below, and choose the one that fits what needs checking at the tim
 ## Never
 
 - Copy, rsync or symlink anything into `core/moodle` or a plugin checkout there.
-- Install, upgrade or uninstall plugins on the dev site. Initialise or drop the
-  playground's own PHPUnit or Behat environment. Install software in its containers.
+- Install, upgrade or uninstall plugins on the dev site, or install software in its
+  containers. (Initialising its PHPUnit environment to run tests is allowed.)
 - Start or stop the playground or Docker, or run git commands in the playground.
 
 If Docker, or the playground when a tool needs it, is not running, ask Brian to
@@ -82,6 +82,12 @@ start it and wait. The tools check this and exit with code 69 and a message.
   the install failed. Don't work around the block; tell Brian, and rely on CI until
   it's resolved.
 
+## Test data
+
+The playground's `faker/` tool loads fictional courses, people and database enrolments
+(`faker/bin/faker.sh up database_basic`, `status`, `reset`); see `faker/README.md`.
+Agents may run it.
+
 ## Not covered locally
 
 PHPDoc, savepoints and MySQL run in the plugin's GitHub Actions after Brian pushes.
@@ -92,7 +98,8 @@ Each plugin's PLAN.md carries an item to rerun its full PHPUnit suite in the
 playground itself, now that the plugin is installed. Run it with
 `vendor/bin/phpunit --testsuite <component>_testsuite` in `moodle-docker-webserver-1`
 from `/var/www/html`. If `php admin/tool/phpunit/cli/util.php --diag` says the
-environment needs initialising, ask Brian before running `init.php`.
+environment needs initialising, run `php admin/tool/phpunit/cli/init.php` first (agreed
+2026-10-23); it takes several minutes.
 
 ## Reporting
 

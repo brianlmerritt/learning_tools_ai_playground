@@ -1,6 +1,9 @@
 # Faker: test data for the playground
 
-Status: plan for discussion (2026-10-23). Nothing is built yet.
+Status: built 2026-10-23. `database_basic` is loaded on the playground; see README.md for usage.
+
+Once `moodle` has run, `enrol_database` is enabled, so the playground's cron also runs its sync
+periodically, as learn does. Leavers stay enrolled because the unenrol action is "keep".
 
 ## Why
 
@@ -64,6 +67,36 @@ faker/
 | `reset` | Deletes everything marked as faker data from Moodle, empties the feed tables and restores the saved `enrol_database` settings. |
 | `status` | Counts what's there now, read-only. |
 
+### `enrol_database` settings the faker applies
+
+These are learn's settings, captured on 2026-10-22 with credentials masked. Only the
+connection settings change, so that the plugin reads the playground's feed.
+
+| Setting | learn | Playground |
+|---|---|---|
+| `dbtype` | `odbc_mssql` | `postgres7` |
+| `dbhost`, `dbuser`, `dbpass` | (masked) | the playground PostgreSQL (`db`) |
+| `dbname` | `Moodle_Snapshot` | `database_enrol` |
+| `dbencoding` | `utf-8` | same |
+| `dbsybasequoting` | `1` (SQL Server) | `0` (PostgreSQL) |
+| `dbsetupsql`, `debugdb` | empty, `0` | same |
+| `remoteenroltable` | `COURSE_ENROLMENT` | same |
+| `remotecoursefield` / `localcoursefield` | `COURSE_ID` / `idnumber` | same |
+| `remoteuserfield` / `localuserfield` | `USER_EMAIL` / `username` | same |
+| `remoterolefield` / `localrolefield` | `ROLE_NAME` / `shortname` | same |
+| `remoteotheruserfield` | empty | same |
+| `defaultrole` | `5` | the playground's student role |
+| `unenrolaction` | `1` (keep) | same |
+| `ignorehiddencourses` | `0` | same |
+| `newcoursetable`, `templatecourse` | empty (no course creation) | same |
+| `localcategoryfield`, `defaultcategory` | `id`, `20` | `id`, unused while course creation is off |
+
+PostgreSQL folds unquoted names to lower case, so the feed table is created unquoted as
+`course_enrolment` with lower-case columns. The plugin's upper-case names then match it.
+
+The `enrol_databaseextendedv2` settings captured at the same time are in the appendix,
+ready for when the extended data set is added.
+
 ### Marking faker data, so reset removes only it
 
 - Courses go under one top-level category, "Faker test data".
@@ -98,16 +131,46 @@ the real shape, for example `1VET-LOC-202526`, across two academic years. It cov
 
 ## Open points
 
-1. **Who runs it:** Brian only, or agents too, once agreed (an exception in CLAUDE.md
-   section 5 for `faker/bin/faker.sh`).
-2. **Language:** PHP with `fakerphp/faker`, which is the same language as the
-   Moodle-side scripts and the Faker that Laravel uses, or Python with `Faker`. PHP
-   keeps one language; it needs packagist, which was briefly blocked by the network DNS
-   on 2026-10-23.
+1. **Who runs it:** decided 2026-10-23. Agents may run the faker CLI, start and stop its
+   container, reconfigure the playground's database-enrolment settings and run tests
+   against the playground (CLAUDE.md section 5).
+2. **Language:** decided: PHP with `fakerphp/faker`, the same language as the
+   Moodle-side scripts.
 3. **Data shape:** Brian to look at real data for sizes, role names, ID number patterns
    and the feed's columns (`user_id`, `user_email`, `course_id`, `role_name`, `group_id`).
-4. **Extended plugin:** whether its code can be installed on the playground. Without it,
-   `database_extended_enrol` can hold data but nothing reads it.
-5. **Feed engine:** learn's core feed is SQL Server over ODBC. PostgreSQL with the same
-   table and column names tests the same plugin logic, but not the ODBC layer.
-6. **Reset:** whether to also delete the two feed databases, or only empty them.
+4. **Extended plugin:** decided: its code will live in the playground; Brian installs it.
+   Until then, `database_extended_enrol` stays empty.
+5. **Feed engine:** decided: PostgreSQL. Moodle handles the transport, so the playground
+   must work through Moodle's own `enrol_database` settings; the faker never bypasses
+   Moodle to feed a plugin.
+6. **Reset:** decided: empty the feed databases and keep them.
+
+## Appendix: learn's `enrol_databaseextendedv2` settings (2026-10-22)
+
+Captured with credentials masked. `dbhost` is set; `dbname`, `dbuser` and `dbpass` are
+empty. The plugin connects in its own way, so the playground needs its code to use
+this feed.
+
+| Setting | Value |
+|---|---|
+| `dbtype` | `mysqli` |
+| `dbencoding` | `utf-8` |
+| `dbsybasequoting`, `debugdb` | `0`, `0` |
+| `remoteenroltable` | `new_moodle_enrolment` |
+| `remotecoursefield` / `localcoursefield` | `course_id` / `idnumber` |
+| `remoteuserfield` / `localuserfield` | `user_id` / `username` |
+| `remoterolefield` / `localrolefield` | `role_id` / `shortname` |
+| `remoteotheruserfield` | empty |
+| `localenrolmentfield`, `localgroupmemberfield` | `courseidnumber`, `courseidnumber` |
+| `localcategoryfield`, `localgroupfield` | `idnumber`, `idnumber` |
+| `defaultrole`, `defaultcategory` | `16`, `471` |
+| `unenrolaction` | `2` (suspend) |
+| `ignorehiddencourses` | `0` |
+| `deletecourseaction`, `readdedcourseaction` | `0`, `0` |
+| `deletecategoryaction`, `absentcategory` | `1`, `0` |
+| `deletegroupmemberaction`, `deletegrouptaction` | `1`, `0` |
+| `newcategorytable` | `new_moodle_category` (`category_id`, `category_desc`, `category_parent`) |
+| `newcoursetable` | `new_moodle_course` (`course_id` as ID number and short name, `course_title`, `course_category`, `course_summary`) |
+| `newgrouptable` | `new_moodle_group` (`group_id`, `course_id`, `group_desc`) |
+| `newgroupmembertable` | `new_moodle_group_member` (`user_id`) |
+| `templatecourse`, `newcoursestartdate`, `newcourseenddate` | empty |
