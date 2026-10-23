@@ -64,10 +64,27 @@ start it and wait. The tools check this and exit with code 69 and a message.
 - **Scope today:** Moodle 4.5 (the playground's checkout) on PostgreSQL. Testing may
   later be expanded to MySQL 8.4 (production) and Moodle 5.3.
 
+## Tool 3: code style (moodle-cs), before every hand-over
+
+```bash
+/Volumes/MacMiniSSD/dev/docker/learning_tools_ai_playground/bin/plugin_phpcs.sh <plugin-dir> [--fix]
+```
+
+- **Use for:** the same check as the plugins' CI (`phpcs --standard=moodle`,
+  failing on any error or warning). Run it on every plugin change before handing
+  the work back to Brian. It doesn't need the playground running.
+- **`--fix`:** runs `phpcbf` first, which corrects the auto-fixable problems in the
+  plugin's own repository, the only place it writes. Fix the rest by hand and run
+  it again until it passes.
+- **First run:** installs moodle-cs with Composer into the kept volume
+  `plugintest_phpcstools`, which needs `repo.packagist.org`. On 2026-10-23 the RVC
+  network's DNS (Jisc protective DNS, `landing.soc.ja.net`) blocked that host, so
+  the install failed. Don't work around the block; tell Brian, and rely on CI until
+  it's resolved.
+
 ## Not covered locally
 
-PHPCS (moodle-cs), PHPDoc, savepoints and MySQL run in the plugin's GitHub Actions
-after Brian pushes.
+PHPDoc, savepoints and MySQL run in the plugin's GitHub Actions after Brian pushes.
 
 ## After Brian installs a plugin through `configs/moodle.yaml`
 

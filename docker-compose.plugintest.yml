@@ -1,6 +1,7 @@
-# Plugin PHPUnit test stack - NOT part of the running playground stack.
+# Plugin PHPUnit and code-style test stack - NOT part of the running playground stack.
 #
-# Used only through bin/plugin_phpunit.sh, as compose project "plugintest". It
+# Used only through bin/plugin_phpunit.sh and bin/plugin_phpcs.sh, as compose
+# project "plugintest". It
 # has its own network, PostgreSQL and volumes, so it never touches the playground
 # containers, its database or moodle-docker.
 #
@@ -53,8 +54,19 @@ services:
       - moodledata:/var/www/moodledata
       - phpunitdata:/var/www/phpunitdata
 
+  # Code-style check, used through bin/plugin_phpcs.sh. moodle-cs is installed
+  # with Composer into the phpcstools volume on the first run (internet needed);
+  # later runs are offline.
+  phpcs:
+    image: moodlehq/moodle-php-apache:8.3
+    environment:
+      COMPOSER_HOME: /opt/phpcs
+    volumes:
+      - phpcstools:/opt/phpcs
+
 volumes:
   dbdata:
   moodle:
   moodledata:
   phpunitdata:
+  phpcstools:
