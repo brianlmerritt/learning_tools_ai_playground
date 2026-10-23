@@ -135,5 +135,9 @@ submodules:
     url: https://github.com/brianlmerritt/open-mod_coursework.git
     path: core/moodle/mod/coursework
     branch: MOODLE_401_STABLE
+  - name: RVC Local Enrolment Manager
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-rvc_enrolment_management.git
+    path: core/moodle/local/rvc_enrolment_management
+    branch: main
 database:
   - name: pgsql
