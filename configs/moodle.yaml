@@ -110,19 +110,19 @@ submodules:
   - name: RVC Local Sofia Curriculum Mapping
     url: https://github.com/RVC-Learn-Digital-Team/moodle-local_curricmap.git
     path: core/moodle/local/curricmap
-    branch: main
+    branch: next_steps
   - name: RVC Activity Module Sofia Curriculum Mapping
     url: https://github.com/RVC-Learn-Digital-Team/moodle-mod_curricmap.git
     path: core/moodle/mod/curricmap
-    branch: main
+    branch: next_steps
   - name: RVC Filter Module Sofia Curriculum Mapping
     url: https://github.com/RVC-Learn-Digital-Team/moodle-filter_curricmap.git
     path: core/moodle/filter/curricmap
-    branch: main
+    branch: next_steps
   - name: RVC TinyMCE Editor Module Sofia Curriculum Mapping
     url: https://github.com/RVC-Learn-Digital-Team/moodle-tiny_curricmap.git
     path: core/moodle/lib/editor/tiny/plugins/curricmap
-    branch: main
+    branch: next_steps
   - name: C4L Moodle TinyMCE plugin for accessibility
     url: https://github.com/reskit/moodle-tiny_c4l.git
     path: core/moodle/lib/editor/tiny/plugins/c4l
@@ -131,5 +131,9 @@ submodules:
     url: https://github.com/RVC-Learn-Digital-Team/moodle-auth_db_salt2.git
     path: core/moodle/auth/db/salt2
     branch: main
+  - name: ULCC Open Mod Coursework
+    url: https://github.com/brianlmerritt/open-mod_coursework.git
+    path: core/moodle/mod/coursework
+    branch: MOODLE_401_STABLE
 database:
   - name: pgsql
