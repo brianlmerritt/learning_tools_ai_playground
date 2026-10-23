@@ -2,7 +2,7 @@ submodules:
   - name: Moodle
     url: https://github.com/moodle/moodle.git
     path: core/moodle
-    tag: v4.5.0
+    branch: MOODLE_405_STABLE
   - name: Moodle Docker
     url: https://github.com/moodlehq/moodle-docker.git
     path: core/moodle-docker
@@ -10,11 +10,7 @@ submodules:
   - name: Elastic Search
     url: https://github.com/catalyst/moodle-search_elastic.git
     path: core/moodle/search/engine/elastic
-    branch: MOODLE_310_STABLE
-  - name: PostgresFullTextSearch
-    url: https://github.com/catalyst/moodle-search_postgresfulltext.git
-    path: core/moodle/search/engine/postgresfulltext
-    branch: master
+    branch: MOODLE_404_STABLE
   - name: Azure Search
     url: https://github.com/catalyst/moodle-search_azure.git
     path: core/moodle/search/engine/azure
@@ -26,11 +22,11 @@ submodules:
   - name: Moodle Course Format Topcoll
     url: https://github.com/gjbarnard/moodle-format_topcoll.git
     path: core/moodle/course/format/topcoll
-    branch: main
+    branch: MOODLE_405
   - name: Moodle Course Format Tiles
     url: https://bitbucket.org/dw8/moodle-format_tiles.git
     path: core/moodle/course/format/tiles
-    branch: master
+    branch: moodle45
   - name: Moodle Auto Enrolment
     url: https://github.com/bobopinna/moodle-enrol_autoenrol.git
     path: core/moodle/enrol/autoenrol
@@ -66,7 +62,7 @@ submodules:
   - name: Attendance Activity
     url: https://github.com/danmarsden/moodle-mod_attendance.git
     path: core/moodle/mod/attendance
-    branch: MOODLE_404_STABLE
+    branch: MOODLE_405_STABLE
   - name: Table Wunderbyte Local
     url: https://github.com/Wunderbyte-GmbH/moodle-local_wunderbyte_table.git
     path: core/moodle/local/wunderbyte_table
@@ -78,7 +74,7 @@ submodules:
   - name: Course Format Grid
     url: https://github.com/gjbarnard/moodle-format_grid.git
     path: core/moodle/course/format/grid
-    branch: main
+    branch: MOODLE_405
   - name: Panopto Button Atto
     url: https://github.com/Panopto/Panopto-Button-for-Atto.git
     path: core/moodle/lib/atto/panopto
@@ -110,6 +106,38 @@ submodules:
   - name: RVC Simple Feedback Rubric
     url: https://github.com/RVC-Learn-Digital-Team/moodle-gradingform_simplefeedbackrubric.git
     path: core/moodle/grade/grading/form/simplefeedbackrubric
+    branch: main
+  - name: RVC Local Sofia Curriculum Mapping
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-local_curricmap.git
+    path: core/moodle/local/curricmap
+    branch: next_steps
+  - name: RVC Activity Module Sofia Curriculum Mapping
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-mod_curricmap.git
+    path: core/moodle/mod/curricmap
+    branch: next_steps
+  - name: RVC Filter Module Sofia Curriculum Mapping
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-filter_curricmap.git
+    path: core/moodle/filter/curricmap
+    branch: next_steps
+  - name: RVC TinyMCE Editor Module Sofia Curriculum Mapping
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-tiny_curricmap.git
+    path: core/moodle/lib/editor/tiny/plugins/curricmap
+    branch: next_steps
+  - name: C4L Moodle TinyMCE plugin for accessibility
+    url: https://github.com/reskit/moodle-tiny_c4l.git
+    path: core/moodle/lib/editor/tiny/plugins/c4l
+    branch: main
+  - name: CPD Auth DB Salt 2
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-auth_db_salt2.git
+    path: core/moodle/auth/db/salt2
+    branch: main
+  - name: ULCC Open Mod Coursework
+    url: https://github.com/brianlmerritt/open-mod_coursework.git
+    path: core/moodle/mod/coursework
+    branch: MOODLE_401_STABLE
+  - name: RVC Local Enrolment Manager
+    url: https://github.com/RVC-Learn-Digital-Team/moodle-rvc_enrolment_management.git
+    path: core/moodle/local/rvc_enrolment_management
     branch: main
 database:
   - name: pgsql

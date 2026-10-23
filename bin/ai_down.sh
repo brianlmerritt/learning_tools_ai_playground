@@ -35,8 +35,7 @@ else
 fi
 
 
-submodules=$(yq -o=json '.submodules' "$SUBMODULES_FILE")
-# submodules=$(yq -o json '.submodules' "$SUBMODULES_FILE")
+submodules=$(yq $YQ_JSON_FLAG '.submodules' "$SUBMODULES_FILE")
 
 # Parse the JSON array in a loop
 echo "$submodules" | jq -c '.[]' | while read -r submodule; do
@@ -59,8 +58,8 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
     if [ "$docker_command" != "null" ]; then
         echo "Shutting down docker containers for $name"
         
-        # Extract the docker-compose file name if specified
-        docker_compose_file=$(echo "$docker_command" | grep -oP '(?<=-f )[^ ]+(?=\.ya?ml)')
+        # Extract the docker-compose file name if specified (portable: no grep -P)
+        docker_compose_file=$(echo "$docker_command" | sed -n 's/.*-f \([^ ]*\)\.ya\{0,1\}ml.*/\1/p')
         
         if [ -n "$docker_compose_file" ]; then
             # Use the specified docker-compose file
@@ -80,7 +79,7 @@ echo "$submodules" | jq -c '.[]' | while read -r submodule; do
             docker compose -f "$compose_file" down
         else
             # For other docker commands, try to extract the container name and stop it
-            container_name=$(echo "$docker_command" | grep -oP '(?<=--name )\w+')
+            container_name=$(echo "$docker_command" | sed -n 's/.*--name \([^ ]*\).*/\1/p')
             if [ -n "$container_name" ]; then
                 docker stop "$container_name"
                 docker rm "$container_name"

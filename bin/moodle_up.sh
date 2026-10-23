@@ -1,4 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# macOS-compatible in-place sed wrapper
+sedi() {
+    if sed --version 2>&1 | grep -q GNU; then
+        sed -i "$@"
+    else
+        sed -i '' "$@"
+    fi
+}
 
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -30,17 +39,19 @@ cp core/moodle-docker/config.docker-template.php $MOODLE_DOCKER_WWWROOT/config.p
 # If SSL override is set, modify the config to use HTTPS
 if [ "${MOODLE_DOCKER_SSL_OVERRIDE}" = "true" ]; then
     # Use sed to replace the http:// with https:// in the Docker deployment section
-    sed -i 's/$CFG->wwwroot   = "http:\/\/{$host}";/$CFG->wwwroot   = "https:\/\/{$host}";/g' $MOODLE_DOCKER_WWWROOT/config.php
+    sedi 's/$CFG->wwwroot   = "http:\/\/{$host}";/$CFG->wwwroot   = "https:\/\/{$host}";/g' $MOODLE_DOCKER_WWWROOT/config.php
     
     # Also add sslproxy setting
-    sed -i '/^$CFG->wwwroot/a $CFG->sslproxy = true;' $MOODLE_DOCKER_WWWROOT/config.php
+    sedi '/^$CFG->wwwroot/a\
+$CFG->sslproxy = true;' $MOODLE_DOCKER_WWWROOT/config.php
 fi
 
 if [ "${MOODLE_DOCKER_SSL_OVERRIDE}" = "true" ]; then
     # First do the config.php modification if not already done
     if ! grep -q "sslproxy = true" $MOODLE_DOCKER_WWWROOT/config.php; then
-        sed -i 's/$CFG->wwwroot   = "http:\/\/{$host}";/$CFG->wwwroot   = "https:\/\/{$host}";/g' $MOODLE_DOCKER_WWWROOT/config.php
-        sed -i '/^$CFG->wwwroot/a $CFG->sslproxy = true;' $MOODLE_DOCKER_WWWROOT/config.php
+        sedi 's/$CFG->wwwroot   = "http:\/\/{$host}";/$CFG->wwwroot   = "https:\/\/{$host}";/g' $MOODLE_DOCKER_WWWROOT/config.php
+        sedi '/^$CFG->wwwroot/a\
+$CFG->sslproxy = true;' $MOODLE_DOCKER_WWWROOT/config.php
     fi
     
     # Create the ssl-override.php file
@@ -86,7 +97,11 @@ bin/moodle-docker-wait-for-db
 echo "Moodle Docker network created:"
 docker network ls | grep moodle-docker | awk '{print $2}'
 
-# Bring up the nginx proxy
-cd $ROOT_DIR/core/nginx_proxy
-docker compose up -d
-echo "Nginx Proxy network created on port:8443"
+# Bring up the nginx proxy (SSL mode only — skipped when MOODLE_DOCKER_SSL=false)
+if [ "${MOODLE_DOCKER_SSL}" = "true" ]; then
+    cd $ROOT_DIR/core/nginx_proxy
+    docker compose up -d
+    echo "Nginx Proxy started on port:8443"
+else
+    echo "SSL disabled — skipping nginx proxy"
+fi

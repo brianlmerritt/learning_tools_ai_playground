@@ -55,7 +55,7 @@ if ! docker network ls --format "{{.Name}}" | grep -q "^${MOODLE_NETWORK}$"; the
 fi
 
 # Read the submodules from the YAML file
-submodules=$(yq -o=json '.submodules' "$SUBMODULES_FILE")
+submodules=$(yq $YQ_JSON_FLAG '.submodules' "$SUBMODULES_FILE")
 
 # Create a temporary file to avoid subshell issues
 temp_file=$(mktemp)
@@ -120,15 +120,10 @@ while IFS= read -r submodule; do
             # Create a backup of the original file
             cp "$yaml_file" "${yaml_file}.backup"
             
-            # Check if the file already has a networks section
-            if yq eval '.networks' "$yaml_file" > /dev/null 2>&1; then
-                echo "Updating existing network configuration in $yaml_file"
-                # Update the network configuration using yq
-                yq eval -i ".networks.moodle_network.external = true" "$yaml_file"
-                yq eval -i ".networks.moodle_network.name = \"$MOODLE_NETWORK\"" "$yaml_file"
-            else
-                echo "Adding network configuration to $yaml_file"
-                # Add the network configuration
+            # Inject moodle_network into the compose file if not already present.
+            # Uses grep+cat to stay compatible with both mikefarah/yq and Python yq.
+            if ! grep -q 'moodle_network:' "$yaml_file"; then
+                echo "Adding moodle_network configuration to $yaml_file"
                 cat >> "$yaml_file" << EOF
 
 networks:
@@ -136,11 +131,13 @@ networks:
     external: true
     name: $MOODLE_NETWORK
 EOF
+            else
+                echo "moodle_network already present in $yaml_file"
             fi
             
             # Show the network configuration for debugging
             echo "Network configuration in $yaml_file:"
-            yq eval '.networks' "$yaml_file"
+            grep -A 4 'networks:' "$yaml_file" | head -8
         fi
         
         # Run the docker compose command with explicit environment variable

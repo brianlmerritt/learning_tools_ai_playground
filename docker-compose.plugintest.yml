@@ -1,0 +1,72 @@
+# Plugin PHPUnit and code-style test stack - NOT part of the running playground stack.
+#
+# Used only through bin/plugin_phpunit.sh and bin/plugin_phpcs.sh, as compose
+# project "plugintest". It
+# has its own network, PostgreSQL and volumes, so it never touches the playground
+# containers, its database or moodle-docker.
+#
+# Mount shape:
+#   /moodle-src           = core/moodle checkout, READ-ONLY - copied, never written
+#   /var/www/html         = named volume holding that copy, with the plugin under
+#                           test placed at its Moodle path
+#   /var/www/moodledata   = named volume
+#   /var/www/phpunitdata  = named volume
+#
+# The copied config.php reads its database settings from the environment below
+# and connects to host "db", which on this project's network is the db service
+# here, not the playground's.
+#
+# Current scope: Moodle 4.5 (the playground's checkout) on PostgreSQL 16. Testing
+# may later be expanded to MySQL 8.4 (production) and Moodle 5.3.
+#
+# Remove the volumes (a fresh copy and database next run):
+#   docker compose -p plugintest -f docker-compose.plugintest.yml down -v
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: moodle
+      POSTGRES_PASSWORD: "m@0dl3ing"
+      POSTGRES_DB: moodle
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moodle -d moodle"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  phpunit:
+    image: moodlehq/moodle-php-apache:8.3
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MOODLE_DOCKER_DBTYPE: pgsql
+      MOODLE_DOCKER_DBNAME: moodle
+      MOODLE_DOCKER_DBUSER: moodle
+      MOODLE_DOCKER_DBPASS: "m@0dl3ing"
+    working_dir: /var/www/html
+    volumes:
+      - ./core/moodle:/moodle-src:ro
+      - moodle:/var/www/html
+      - moodledata:/var/www/moodledata
+      - phpunitdata:/var/www/phpunitdata
+
+  # Code-style check, used through bin/plugin_phpcs.sh. moodle-cs is installed
+  # with Composer into the phpcstools volume on the first run (internet needed);
+  # later runs are offline.
+  phpcs:
+    image: moodlehq/moodle-php-apache:8.3
+    environment:
+      COMPOSER_HOME: /opt/phpcs
+    volumes:
+      - phpcstools:/opt/phpcs
+
+volumes:
+  dbdata:
+  moodle:
+  moodledata:
+  phpunitdata:
+  phpcstools:
